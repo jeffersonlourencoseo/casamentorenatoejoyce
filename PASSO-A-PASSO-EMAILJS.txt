@@ -1,0 +1,221 @@
+============================================
+PASSO A PASSO COMPLETO - EMAILJS
+Casamento Renato & Joyce
+============================================
+
+O QUE E O EMAILJS?
+------------------
+EmailJS e um servico gratuito que permite enviar emails diretamente do seu site
+sem precisar de um servidor de email proprio. No caso do casamento, ele envia
+uma notificacao por email para Renato e Joyce toda vez que alguem:
+1. Confirma presenca (RSVP)
+2. Compra um presente
+
+OBS: O site FUNCIONA SEM o EmailJS. Os dados sao salvos no Google Sheets de
+qualquer forma. O EmailJS e apenas um "plus" de notificacao por email.
+
+
+============================================
+PASSO 1: ACESSAR O EMAILJS
+============================================
+
+1. Abra o navegador e va para: https://www.emailjs.com
+2. Clique em "Sign Up" ou "Get Started"
+3. Crie uma conta usando o email: joycelourenco.st@gmail.com
+   (ou qualquer email que voces queiram receber as notificacoes)
+4. Confirme o email na caixa de entrada
+
+
+============================================
+PASSO 2: CONECTAR O EMAIL (SERVICO)
+============================================
+
+O "Service" e a conta de email que vai ENVIAR as notificacoes.
+
+1. No dashboard do EmailJS, clique no menu lateral: "Email Services"
+2. Clique no botao: "Add New Service" (ou "+ Add Service")
+3. Escolha "Gmail" na lista
+4. Clique em "Connect Account"
+5. Faca login com a conta Google (joycelourenco.st@gmail.com)
+6. IMPORTANTE: Na tela de permissao do Google, marque TODAS as opcoes,
+   especialmente "Send email on your behalf" (Enviar email em seu nome)
+7. Clique em "Allow" (Permitir)
+
+Se der erro "insufficient authentication scopes":
+- Volte em "Email Services"
+- Clique no servico criado
+- Clique em "Remove" e adicione novamente
+- Ou tente usar outro provedor como "Outlook" ou "Yahoo"
+
+8. Depois de conectado, de um nome ao servico, ex: "Gmail Casamento"
+9. Clique em "Create"
+10. Anote o "Service ID" que aparece (ex: service_xxxxxxx)
+
+
+============================================
+PASSO 3: CRIAR OS TEMPLATES DE EMAIL
+============================================
+
+O "Template" e o modelo/layout do email que sera enviado.
+
+1. No menu lateral, clique em: "Email Templates"
+2. Clique em: "Create New Template"
+
+----------------------------------
+TEMPLATE 1: CONFIRMACAO DE PRESENCA (RSVP)
+----------------------------------
+
+Template Name: rsvp
+
+Subject (Assunto):
+✅ {{from_name}} confirmou presença no casamento!
+
+Content (Corpo do email):
+Olá Renato e Joyce!
+
+{{from_name}} acabou de confirmar presença no casamento através do site.
+
+Detalhes:
+- Nome: {{from_name}}
+- Mensagem: {{message}}
+
+Data do envio: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+----------------------------------
+
+Clique em "Save"
+
+Anote o "Template ID" que aparece embaixo do nome (ex: template_xxxxxx)
+
+
+----------------------------------
+TEMPLATE 2: PRESENTE COMPRADO
+----------------------------------
+
+Template Name: presente
+
+Subject (Assunto):
+🎁 {{from_name}} comprou um presente!
+
+Content (Corpo do email):
+Olá Renato e Joyce!
+
+{{from_name}} acabou de comprar um presente através do site.
+
+Detalhes:
+- Presente: {{message}}
+- Comprador: {{from_name}}
+
+Data da compra: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+----------------------------------
+
+Clique em "Save"
+
+Anote o "Template ID" que aparece embaixo do nome (ex: template_yyyyyy)
+
+
+============================================
+PASSO 4: PEGAR A PUBLIC KEY
+============================================
+
+A Public Key identifica sua conta no EmailJS.
+
+1. Clique no menu lateral: "Account" (ou seu nome/email no canto superior direito)
+2. Procure por: "Public Key"
+3. Copie o valor (geralmente comeca com letras e numeros, ex: abcDeF123...)
+
+
+============================================
+PASSO 5: INFORMAR OS DADOS AO DESENVOLVEDOR
+============================================
+
+Apos completar os passos acima, voce tera 4 informacoes:
+
+1. Service ID: _______________________
+2. Template ID (RSVP): _______________________
+3. Template ID (Presente): _______________________
+4. Public Key: _______________________
+
+Envie essas 4 informacoes para que o desenvolvedor atualize o site.
+
+
+============================================
+PASSO 6: COLOCAR OS DADOS NO SITE (opcional)
+============================================
+
+Se preferir, voce mesmo pode colocar os dados no arquivo index.html:
+
+1. Abra o arquivo index.html na pasta do projeto
+2. Procure por esta parte (proximo do final):
+
+   window.APP_CONFIG = {
+     googleSheetsWebhookUrl: '...',
+     emailjsServiceId: '',
+     emailjsTemplatePresente: '',
+     emailjsTemplateRsvp: '',
+     emailjsPublicKey: ''
+   };
+
+3. Preencha entre as aspas:
+
+   window.APP_CONFIG = {
+     googleSheetsWebhookUrl: '...',
+     emailjsServiceId: 'SEU_SERVICE_ID',
+     emailjsTemplatePresente: 'SEU_TEMPLATE_PRESENTE',
+     emailjsTemplateRsvp: 'SEU_TEMPLATE_RSVP',
+     emailjsPublicKey: 'SUA_PUBLIC_KEY'
+   };
+
+4. Salve o arquivo
+5. Envie para o GitHub: git add -A && git commit -m "Adiciona EmailJS" && git push origin main
+
+
+============================================
+TESTANDO
+============================================
+
+Apos configurado, faca um teste:
+1. Acesse o site
+2. Va em "Confirmar Presenca"
+3. Preencha nome, sobrenome e escolha "Sim"
+4. Clique em "Confirmar presenca"
+5. Verifique se o email chegou na caixa de entrada de joycelourenco.st@gmail.com
+
+IMPORTANTE: Verifique tambem a pasta SPAM/Lixo Eletronico!
+
+
+============================================
+PROBLEMAS COMUNS
+============================================
+
+PROBLEMA: "Request had insufficient authentication scopes"
+SOLUCAO: Remova o servico Gmail e adicione novamente, aceitando TODAS as permissoes.
+         Ou use outro provedor (Outlook, Yahoo).
+
+PROBLEMA: Emails nao chegam
+SOLUCAO: Verifique a pasta SPAM. Adicione noreply@emailjs.com aos contatos seguros.
+
+PROBLEMA: Nao consigo criar templates
+SOLUCAO: Certifique-se de estar no plano gratuito. O EmailJS permite ate 200 emails/mes de graca.
+
+PROBLEMA: Nao aparece o botao "Create New Template"
+SOLUCAO: No dashboard, procure por um botao "+" ou "New Template" ao lado de "Email Templates".
+         As vezes a interface muda, pode estar em "Templates" ou "Custom Templates".
+
+
+============================================
+CONTATO E SUPORTE
+============================================
+
+Documentacao oficial: https://www.emailjs.com/docs/
+Suporte EmailJS: https://dashboard.emailjs.com/admin/support
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================
