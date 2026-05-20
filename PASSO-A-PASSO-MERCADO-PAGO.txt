@@ -1,0 +1,267 @@
+============================================
+PASSO A PASSO COMPLETO - MERCADO PAGO (PIX AUTOMATICO)
+Casamento Renato & Joyce
+============================================
+
+O QUE E O MERCADO PAGO?
+------------------------
+O Mercado Pago e uma plataforma de pagamentos do grupo Mercado Livre.
+Ela permite gerar cobrancas PIX automaticamente via API, usando apenas CPF.
+
+Diferente da OpenPix, o Mercado Pago aceita pessoa fisica (CPF).
+
+
+============================================
+REQUISITO IMPORTANTE
+============================================
+
+Voce PRECISA estar no COMPUTADOR (desktop/notebook).
+Nao funciona pelo app do celular. Use o navegador (Chrome, Edge, Firefox, Safari).
+
+
+============================================
+PASSO 1: ACESSAR O MERCADO PAGO PELO COMPUTADOR
+============================================
+
+1. No computador, abra o navegador (Chrome, Edge, Firefox, etc.)
+2. Va para: https://www.mercadopago.com.br
+3. Faca login com a conta que voce criou no celular
+   (use o mesmo email e senha)
+4. Confirme que esta logado vendo seu nome no canto superior direito
+
+
+============================================
+PASSO 2: ACESSAR A AREA DE DESENVOLVEDORES
+============================================
+
+1. Com a conta logada, abra uma nova aba no navegador
+2. Va para: https://www.mercadopago.com.br/developers
+   (ou procure no Google: "mercado pago developers")
+3. Voce vai cair em uma pagina chamada "Mercado Pago Developers"
+4. No canto superior direito, clique em "Entrar" ou "Log in"
+5. Faca login novamente com a MESMA conta do Mercado Pago
+
+
+============================================
+PASSO 3: CRIAR UMA APLICACAO
+============================================
+
+A "Aplicacao" e como um "projeto" dentro do Mercado Pago.
+
+1. Na pagina Developers, procure por um botao escrito:
+   - "Suas integracoes" ou
+   - "Suas aplicacoes" ou
+   - "Aplicacoes" ou
+   - "Criar aplicacao"
+
+   (a interface muda, mas geralmente esta no menu lateral esquerdo
+    ou no centro da pagina)
+
+2. Clique em "Criar aplicacao" (ou "Nova aplicacao" / "Add application")
+3. Preencha:
+   - Nome: Casamento Renato e Joyce
+   - Modelo de negocio: "Servicos" ou "Outros" ou "Eventos"
+   - Se pedir integracao: escolha "Pagamentos online" ou "Checkout"
+4. Clique em "Criar aplicacao" ou "Salvar"
+
+
+============================================
+PASSO 4: PEGAR O ACCESS TOKEN
+============================================
+
+O Access Token e a "senha secreta" que permite ao site gerar cobrancas PIX.
+
+1. Dentro da aplicacao criada, procure por um menu ou aba chamado:
+   - "Credenciais" ou
+   - "Producao" ou
+   - "Credenciais de producao"
+
+2. Voce vai ver DUAS chaves:
+   - Public Key (chave publica)
+   - Access Token (token de acesso)
+
+3. O que a gente PRECISA e o **Access Token**
+   - Ele comeca com: APP_USR- (ambiente de producao)
+   - Ou comeca com: TEST- (ambiente de teste)
+
+4. IMPORTANTE: use o Access Token de PRODUCAO (APP_USR-)
+   NAO use o de teste (TEST-) a menos que queira testar primeiro
+
+5. Clique em "Copiar" ao lado do Access Token
+   (ou selecione e copie manualmente com Ctrl+C)
+
+6. IMPORTANTE: guarde esse Access Token com cuidado.
+   Nao mostre para ninguem. Ele permite criar cobrancas no seu nome.
+
+
+============================================
+PASSO 5: COLOCAR O ACCESS TOKEN NO VERCEL
+============================================
+
+O Vercel e onde o site esta hospedado. Precisamos colocar o Access Token
+la para que o site consiga usar a API do Mercado Pago.
+
+1. No computador, abra: https://vercel.com
+2. Faca login com a conta GitHub (a mesma que usou para subir o site)
+3. Voce vai ver o projeto "casamentorenatoejoyce"
+4. Clique no projeto para abrir
+5. No topo da pagina, clique em "Settings" (engrenagem)
+6. No menu lateral esquerdo, clique em "Environment Variables"
+7. Voce vera uma lista de variaveis (ja existe OPENPIX_APP_ID)
+8. Clique em "Add" ou no botao "+" para adicionar nova variavel
+9. Preencha:
+   - Name (nome): MERCADO_PAGO_ACCESS_TOKEN
+   - Value (valor): cole aqui o Access Token que voce copiou
+10. Clique em "Save" (salvar)
+
+
+============================================
+PASSO 6: APAGAR A VARIAVEL ANTIGA DA OPENPIX (opcional)
+============================================
+
+Se existir uma variavel chamada OPENPIX_APP_ID, voce pode apagar
+pois nao vamos mais usar a OpenPix.
+
+1. Em "Environment Variables", procure por OPENPIX_APP_ID
+2. Clique nos "3 pontinhos" ao lado dela
+3. Clique em "Delete" (remover)
+4. Confirme
+
+
+============================================
+PASSO 7: REDEPLOY (REIMPLANTAR) O SITE
+============================================
+
+Depois de adicionar a nova variavel, precisa fazer o site "reiniciar"
+para ele reconhecer a nova configuracao.
+
+1. No Vercel, clique na aba "Deployments" (Implantacoes)
+2. Voce vera uma lista de deploys. O primeiro da lista e o mais recente.
+3. Clique nos "3 pontinhos" ao lado do deploy mais recente
+4. Escolha "Redeploy" (Reimplantar)
+5. Confirme clicando em "Redeploy"
+6. Aguarde 1-2 minutos ate ficar pronto
+
+
+============================================
+PASSO 8: INFORMAR O DESENVOLVEDOR
+============================================
+
+Apos completar os passos acima, voce tera:
+
+- Access Token do Mercado Pago
+- (opcional) Public Key do Mercado Pago
+
+Envie o Access Token para que o desenvolvedor possa atualizar
+os arquivos do backend (api/criar-cobranca.js e api/checar-status.js)
+para usar a API do Mercado Pago.
+
+
+============================================
+PASSO 9: O DESENVOLVEDOR VAI FAZER
+============================================
+
+Com o Access Token em maos, o desenvolvedor vai:
+
+1. Reescrever o arquivo api/criar-cobranca.js
+   - Usar a API de pagamentos do Mercado Pago
+   - Criar uma Preference (preferencia de pagamento) com valor do presente
+   - Gerar QR Code PIX automaticamente
+
+2. Reescrever o arquivo api/checar-status.js
+   - Consultar o Mercado Pago para verificar se o pagamento foi aprovado
+   - Retornar "COMPLETED" quando pago
+
+3. Ajustar o frontend (script.js)
+   - Adaptar o fluxo para a resposta do Mercado Pago
+   - Manter a mesma experiencia do usuario (modal, QR Code, copiar codigo)
+
+4. Commitar e subir no GitHub
+   - O Vercel faz deploy automatico
+
+
+============================================
+COMO FUNCIONA O FLUXO FINAL
+============================================
+
+1. Convidado entra no site
+2. Vai em "Lista de Presentes"
+3. Escolhe uma categoria e abre
+4. Clica em "Presentear" no presente desejado
+5. Preenche Nome e Sobrenome
+6. Clica em "Gerar PIX"
+7. O site chama a API do Mercado Pago
+8. Mercado Pago cria uma cobranca e devolve:
+   - Um QR Code (imagem)
+   - Um codigo PIX copiavel
+9. Convidado escaneia ou copia e paga no app do banco
+10. O site fica verificando a cada 3 segundos
+11. Quando o pagamento e confirmado:
+    - Fecha o modal de PIX
+    - Abre modal de sucesso com confetes
+    - Pergunta se quer deixar um recado
+    - Salva na planilha Google Sheets
+    - Envia email para voces via EmailJS
+
+
+============================================
+PROBLEMAS COMUNS
+============================================
+
+PROBLEMA: Nao consigo acessar https://www.mercadopago.com.br/developers
+SOLUCAO: Certifique-se de estar logado no Mercado Pago primeiro.
+         Acesse https://www.mercadopago.com.br, faca login,
+         depois abra o link developers em nova aba.
+
+PROBLEMA: Nao aparece o botao "Criar aplicacao"
+SOLUCAO: No dashboard de developers, procure no menu lateral esquerdo
+         por "Aplicacoes", "Integracoes" ou "Meus projetos".
+         As vezes esta em uma aba chamada "Your applications".
+
+PROBLEMA: Nao encontro o Access Token
+SOLUCAO: Dentro da aplicacao, va em "Credenciais" ou "Credenciais de producao".
+         Se estiver em "Sandbox" ou "Teste", procure por "Producao".
+         Se nao houver credenciais de producao, pode ser necessario
+         ativar a conta (confirmar dados pessoais no Mercado Pago).
+
+PROBLEMA: O Access Token comeca com TEST-
+SOLUCAO: Voce esta no ambiente de teste. Para o site funcionar de verdade,
+         precisa usar o de producao (APP_USR-).
+         Va em "Credenciais de producao" ou clique em "Ativar credenciais de producao".
+
+PROBLEMA: O site nao gera o QR Code
+SOLUCAO: Verifique se a variavel MERCADO_PAGO_ACCESS_TOKEN foi salva
+         corretamente no Vercel. Va em Settings > Environment Variables
+         e confira se o valor esta completo.
+
+
+============================================
+CONTATO E SUPORTE
+============================================
+
+Documentacao oficial Mercado Pago:
+https://www.mercadopago.com.br/developers/pt/docs
+
+Suporte Mercado Pago:
+https://www.mercadopago.com.br/ajuda
+
+
+============================================
+RESUMO DO QUE VOCE PRECISA FAZER AGORA
+============================================
+
+1. No COMPUTADOR, va em https://www.mercadopago.com.br/developers
+2. Faca login com a conta que criou no celular
+3. Crie uma "Aplicacao" chamada "Casamento Renato e Joyce"
+4. Va em "Credenciais" e copie o Access Token (comeca com APP_USR-)
+5. Va no Vercel (https://vercel.com), projeto casamentorenatoejoyce
+6. Settings > Environment Variables > Add
+7. Adicione: MERCADO_PAGO_ACCESS_TOKEN = (cole o token)
+8. Va em Deployments > Redeploy
+9. Me envie o Access Token
+10. Eu atualizo o backend e subo no GitHub
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================
