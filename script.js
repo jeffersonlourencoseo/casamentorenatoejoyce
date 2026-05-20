@@ -619,6 +619,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Swipe down to close lightbox (mobile gesture)
+  let lightboxTouchStartY = 0;
+  lightbox.addEventListener('touchstart', (e) => {
+    lightboxTouchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+
+  lightbox.addEventListener('touchend', (e) => {
+    const touchEndY = e.changedTouches[0].screenY;
+    if (touchEndY - lightboxTouchStartY > 80) {
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+  }, { passive: true });
+
   /* ---------------- Mural de Recados ---------------- */
   const muralGrid      = document.getElementById('mural-grid');
   const muralNome      = document.getElementById('mural-nome');
@@ -672,8 +687,8 @@ document.addEventListener('DOMContentLoaded', () => {
       btnMuralEnviar.disabled = true;
       btnMuralEnviar.textContent = 'Enviando...';
 
-      const googleUrl = typeof process !== 'undefined' && process.env && process.env.GOOGLE_SHEETS_WEBHOOK_URL
-        ? process.env.GOOGLE_SHEETS_WEBHOOK_URL
+      const googleUrl = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
+        ? window.APP_CONFIG.googleSheetsWebhookUrl
         : '';
 
       try {
