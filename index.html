@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renato & Joyce</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="hero" id="hero">
+        <div class="petals-container" aria-hidden="true">
+            <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+            <div class="petal"></div><div class="petal"></div><div class="petal"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">Renato <span class="hero-amp">&amp;</span> Joyce</h1>
+            <p class="hero-subtitle">Dois loucos. Uma decisão. Vocês são testemunhas.</p>
+            <div class="countdown" id="countdown">
+                <div class="countdown-item"><span id="days">00</span><small>dias</small></div>
+                <div class="countdown-sep">:</div>
+                <div class="countdown-item"><span id="hours">00</span><small>horas</small></div>
+                <div class="countdown-sep">:</div>
+                <div class="countdown-item"><span id="minutes">00</span><small>min</small></div>
+                <div class="countdown-sep">:</div>
+                <div class="countdown-item"><span id="seconds">00</span><small>seg</small></div>
+            </div>
+            <a href="#lista-de-presentes" class="btn btn-primary">Ver a Lista de Presentes ↓</a>
+        </div>
+    </header>
+
+    <section class="informacoes" id="informacoes">
+        <div class="container">
+            <h2 class="section-title">Informações do Evento</h2>
+            <div class="info-grid">
+                <div class="info-card">
+                    <div class="info-icon">📅</div>
+                    <h3>Recepção</h3>
+                    <p>14 de fevereiro de 2026<br>às 17h</p>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">📍</div>
+                    <h3>Local</h3>
+                    <p>Espaço Villa Jardim</p>
+                    <address>Rua das Orquídeas, 240 — Barra da Tijuca, Rio de Janeiro</address>
+                    <a href="https://maps.google.com/?q=Rua+das+Orquídeas+240+Barra+da+Tijuca+Rio+de+Janeiro" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">📍 Ver no Google Maps</a>
+                </div>
+                <div class="info-card">
+                    <div class="info-icon">👗</div>
+                    <h3>Dress Code</h3>
+                    <p>Vista-se bem. Melhor que a noiva, impossível.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="lista-de-presentes" id="lista-de-presentes">
+        <div class="container">
+            <h2 class="section-title">Lista de Presentes</h2>
+            <div class="gifts-filters">
+                <div class="filters-scroll" id="filters-scroll">
+                    <button class="filter-chip active" data-filter="all">Todos</button>
+                    <button class="filter-chip" data-filter="imoveis">🏠 Imóveis</button>
+                    <button class="filter-chip" data-filter="veiculos">🚗 Veículos</button>
+                    <button class="filter-chip" data-filter="viagens">✈️ Viagens</button>
+                    <button class="filter-chip" data-filter="familia">👨‍👩‍👧 Família</button>
+                    <button class="filter-chip" data-filter="tecnologia">📺 Tecnologia</button>
+                    <button class="filter-chip" data-filter="relacionamento">💑 Relacionamento</button>
+                    <button class="filter-chip" data-filter="gastronomia">🍽️ Gastronomia</button>
+                    <button class="filter-chip" data-filter="saude">💪 Saúde</button>
+                    <button class="filter-chip" data-filter="trabalho">💼 Trabalho</button>
+                    <button class="filter-chip" data-filter="casa">🧹 Casa</button>
+                    <button class="filter-chip" data-filter="natureza">🌿 Natureza</button>
+                    <button class="filter-chip" data-filter="conhecimento">🎓 Conhecimento</button>
+                    <button class="filter-chip" data-filter="lazer">🎭 Lazer</button>
+                </div>
+            </div>
+            <div class="gifts-search">
+                <input type="text" id="gift-search" placeholder="🔍 Buscar presente..." autocomplete="off">
+            </div>
+            <div class="gifts-grid" id="gifts-grid">
+                <!-- Cards gerados por JS -->
+            </div>
+        </div>
+    </section>
+
+    <section class="rsvp" id="rsvp">
+        <div class="container">
+            <h2 class="section-title">Confirmar Presença</h2>
+            <div class="rsvp-form" id="rsvp-form">
+                <div class="rsvp-fields">
+                    <label>
+                        <span>Nome</span>
+                        <input type="text" id="rsvp-name" placeholder="Seu nome" required>
+                    </label>
+                    <label>
+                        <span>Sobrenome</span>
+                        <input type="text" id="rsvp-surname" placeholder="Seu sobrenome" required>
+                    </label>
+                </div>
+                <p class="rsvp-question">Você vai comparecer?</p>
+                <div class="rsvp-options">
+                    <button class="rsvp-btn" data-value="Sim">Sim</button>
+                    <button class="rsvp-btn" data-value="Com certeza">Com certeza</button>
+                    <button class="rsvp-btn" data-value="Provavelmente sim">Provavelmente sim</button>
+                </div>
+                <button class="btn btn-primary rsvp-submit" id="rsvp-submit">Confirmar presença 💛</button>
+                <p class="rsvp-msg hidden" id="rsvp-msg">Confirmado! Te esperamos lá 🎉</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="galeria" id="galeria">
+        <div class="container">
+            <h2 class="section-title">Galeria</h2>
+            <div class="gallery-grid">
+                <div class="gallery-item" data-index="1">
+                    <img src="assets/fotos/foto1.jpg" alt="Foto do casal 1" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-placeholder">📷<span>foto em breve</span></div>
+                </div>
+                <div class="gallery-item" data-index="2">
+                    <img src="assets/fotos/foto2.jpg" alt="Foto do casal 2" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-placeholder">📷<span>foto em breve</span></div>
+                </div>
+                <div class="gallery-item" data-index="3">
+                    <img src="assets/fotos/foto3.jpg" alt="Foto do casal 3" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-placeholder">📷<span>foto em breve</span></div>
+                </div>
+                <div class="gallery-item" data-index="4">
+                    <img src="assets/fotos/foto4.jpg" alt="Foto do casal 4" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-placeholder">📷<span>foto em breve</span></div>
+                </div>
+                <div class="gallery-item" data-index="5">
+                    <img src="assets/fotos/foto5.jpg" alt="Foto do casal 5" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-placeholder">📷<span>foto em breve</span></div>
+                </div>
+                <div class="gallery-item" data-index="6">
+                    <img src="assets/fotos/foto6.jpg" alt="Foto do casal 6" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <div class="gallery-placeholder">📷<span>foto em breve</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Lightbox -->
+        <div class="lightbox" id="lightbox" aria-hidden="true">
+            <button class="lightbox-close" id="lightbox-close" aria-label="Fechar">&times;</button>
+            <img id="lightbox-img" src="" alt="">
+        </div>
+    </section>
+
+    <section class="mural-de-recados" id="mural-de-recados">
+        <div class="container">
+            <h2 class="section-title">Mural de Recados</h2>
+            <div class="mural-grid" id="mural-grid">
+                <!-- Post-its gerados por JS -->
+            </div>
+            <div class="mural-form">
+                <div class="mural-fields">
+                    <input type="text" id="mural-nome" placeholder="Seu nome" required>
+                    <textarea id="mural-mensagem" rows="3" placeholder="Deixe seu recado..." required></textarea>
+                </div>
+                <button class="btn btn-primary" id="btn-mural-enviar">Deixar recado 💛</button>
+            </div>
+        </div>
+    </section>
+
+    <footer class="rodape" id="rodape">
+        <p>Feito com amor (e desespero) pela família <span class="heart">❤️</span></p>
+    </footer>
+
+    <!-- Modal: Presentear -->
+    <div class="modal-overlay" id="modal-presentear" aria-hidden="true">
+        <div class="modal">
+            <button class="modal-close" id="modal-close-presentear" aria-label="Fechar">&times;</button>
+            <div class="modal-body" id="modal-body-form">
+                <h3 class="modal-title">🎁 <span id="modal-gift-name"></span></h3>
+                <p class="modal-price" id="modal-gift-price"></p>
+                <div class="modal-fields">
+                    <label>
+                        <span>Nome</span>
+                        <input type="text" id="payer-name" placeholder="Seu nome" required>
+                    </label>
+                    <label>
+                        <span>Sobrenome</span>
+                        <input type="text" id="payer-surname" placeholder="Seu sobrenome" required>
+                    </label>
+                </div>
+                <button class="btn btn-primary modal-btn" id="btn-gerar-pix">Gerar PIX 💛</button>
+            </div>
+            <div class="modal-body hidden" id="modal-body-pix">
+                <p class="modal-hint">Escaneie com qualquer app do seu banco</p>
+                <div class="modal-qr" id="modal-qr"></div>
+                <button class="btn btn-secondary modal-btn" id="btn-copiar-pix">Copiar código PIX</button>
+                <p class="modal-status" id="modal-status">Aguardando pagamento...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Sucesso + Recado -->
+    <div class="modal-overlay" id="modal-sucesso" aria-hidden="true">
+        <div class="modal modal--success">
+            <div class="confetti-container" id="confetti-container" aria-hidden="true"></div>
+            <h3 class="modal-title">🎉 Que presente incrível!</h3>
+            <p class="modal-subtitle">Deixe um recado para os noivos:</p>
+            <textarea id="gift-message" rows="4" placeholder="Escreva seu recado aqui..."></textarea>
+            <button class="btn btn-primary modal-btn" id="btn-enviar-recado">Enviar recado 💛</button>
+            <p class="modal-final hidden" id="modal-final-msg">Recado enviado! Renato e Joyce vão adorar 💛</p>
+        </div>
+    </div>
+
+    <script>
+      // Configuração do frontend — preencha antes de publicar
+      window.APP_CONFIG = {
+        googleSheetsWebhookUrl: '',      // Cole aqui a URL do Apps Script
+        emailjsServiceId: '',            // EmailJS Service ID
+        emailjsTemplatePresente: '',     // EmailJS Template ID (presente)
+        emailjsTemplateRsvp: '',        // EmailJS Template ID (RSVP)
+        emailjsPublicKey: ''           // EmailJS Public Key
+      };
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
