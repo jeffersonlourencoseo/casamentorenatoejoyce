@@ -1,6 +1,49 @@
-// Renato & Joyce — Main Script
+// Renato & Joyce — Main Script v2 (Accordion gifts)
 
 document.addEventListener('DOMContentLoaded', () => {
+  /* ---------------- Nav scroll + hamburger ---------------- */
+  const navFixed = document.getElementById('nav-fixed');
+  const navToggle = document.getElementById('nav-toggle');
+  const navOverlay = document.getElementById('nav-overlay');
+  const navOverlayClose = document.getElementById('nav-overlay-close');
+  const navLinks = document.querySelectorAll('.nav-link');
+
+  if (navFixed) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) navFixed.classList.add('scrolled');
+      else navFixed.classList.remove('scrolled');
+    }, { passive: true });
+  }
+
+  function openMenu() {
+    navToggle.classList.add('active');
+    navToggle.setAttribute('aria-expanded', 'true');
+    navOverlay.classList.add('open');
+    navOverlay.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMenu() {
+    navToggle.classList.remove('active');
+    navToggle.setAttribute('aria-expanded', 'false');
+    navOverlay.classList.remove('open');
+    navOverlay.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
+
+  if (navToggle) navToggle.addEventListener('click', () => {
+    if (navOverlay.classList.contains('open')) closeMenu();
+    else openMenu();
+  });
+
+  if (navOverlayClose) navOverlayClose.addEventListener('click', closeMenu);
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      closeMenu();
+    });
+  });
+
   /* ---------------- Countdown ---------------- */
   const targetDate = new Date('2026-02-14T17:00:00-03:00'); // Rio timezone
 
@@ -34,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCountdown();
   setInterval(updateCountdown, 1000);
 
-  /* ---------------- Lista de Presentes ---------------- */
+  /* ---------------- Lista de Presentes (Accordion) ---------------- */
   const giftsData = [
     { id: 1,  category: 'imoveis',       emoji: '🏠', name: 'Cobertura duplex em Ipanema', price: 59.90, meta: 'Vista pro mar inclusa' },
     { id: 2,  category: 'imoveis',       emoji: '🏠', name: 'Sítio com piscina no interior', price: 74.00, meta: 'Galinha não inclusa' },
@@ -130,50 +173,98 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 92, category: 'casa',          emoji: '🧹', name: 'Reforma da cozinha completa', price: 149.00, meta: 'Dentro do orçamento impossível' }
   ];
 
-  let unavailableIds = [];
-  let currentFilter = 'all';
-  let currentSearch = '';
+  const categoryNames = {
+    imoveis: 'Imóveis',
+    veiculos: 'Veículos',
+    viagens: 'Viagens',
+    familia: 'Família',
+    tecnologia: 'Tecnologia',
+    relacionamento: 'Relacionamento',
+    gastronomia: 'Gastronomia',
+    saude: 'Saúde',
+    trabalho: 'Trabalho',
+    casa: 'Casa',
+    natureza: 'Natureza',
+    conhecimento: 'Conhecimento',
+    lazer: 'Lazer'
+  };
 
-  const grid = document.getElementById('gifts-grid');
-  const searchInput = document.getElementById('gift-search');
-  const filterButtons = document.querySelectorAll('.filter-chip');
+  const categoryOrder = [
+    'imoveis','veiculos','viagens','familia','tecnologia','relacionamento',
+    'gastronomia','saude','trabalho','casa','natureza','conhecimento','lazer'
+  ];
+
+  let unavailableIds = [];
+  const accordionContainer = document.getElementById('gifts-accordion');
 
   function formatPrice(value) {
     return 'R$' + value.toFixed(2).replace('.', ',');
   }
 
-  function renderGifts() {
-    if (!grid) return;
-    grid.innerHTML = '';
-
-    const filtered = giftsData.filter(g => {
-      const matchCategory = currentFilter === 'all' || g.category === currentFilter;
-      const matchSearch = g.name.toLowerCase().includes(currentSearch.toLowerCase());
-      return matchCategory && matchSearch;
-    });
-
-    if (filtered.length === 0) {
-      grid.innerHTML = '<div class="gift-empty">Nenhum presente encontrado 😢</div>';
-      return;
-    }
-
-    filtered.forEach(g => {
-      const isUnavailable = unavailableIds.includes(g.id);
-      const card = document.createElement('div');
-      card.className = 'gift-card' + (isUnavailable ? ' unavailable' : '');
-      card.innerHTML = `
+  function renderGiftCard(g) {
+    const isUnavailable = unavailableIds.includes(g.id);
+    return `
+      <div class="gift-card ${isUnavailable ? 'unavailable' : ''}">
         <div class="gift-emoji">${g.emoji}</div>
         <div class="gift-name">${g.name}</div>
         <div class="gift-meta">${g.meta}</div>
         <div class="gift-price">${formatPrice(g.price)}</div>
         ${isUnavailable ? '<div class="gift-badge">INDISPONÍVEL 🔒</div>' : ''}
         <button class="gift-btn" ${isUnavailable ? 'disabled' : ''} data-id="${g.id}">Presentear 💛</button>
+      </div>
+    `;
+  }
+
+  function renderAccordion() {
+    if (!accordionContainer) return;
+    accordionContainer.innerHTML = '';
+
+    categoryOrder.forEach(cat => {
+      const items = giftsData.filter(g => g.category === cat);
+      if (items.length === 0) return;
+
+      const categoryDiv = document.createElement('div');
+      categoryDiv.className = 'gift-category';
+      categoryDiv.dataset.category = cat;
+
+      const availableCount = items.filter(g => !unavailableIds.includes(g.id)).length;
+      const countLabel = availableCount === items.length
+        ? `${items.length} presentes`
+        : `${availableCount} de ${items.length} disponíveis`;
+
+      categoryDiv.innerHTML = `
+        <button class="gift-category-header" aria-expanded="false">
+          <span class="gift-category-name">${categoryNames[cat]}</span>
+          <span class="gift-category-count">${countLabel}</span>
+          <span class="gift-category-icon">›</span>
+        </button>
+        <div class="gift-category-body">
+          <div class="gifts-grid">
+            ${items.map(renderGiftCard).join('')}
+          </div>
+        </div>
       `;
-      grid.appendChild(card);
+
+      accordionContainer.appendChild(categoryDiv);
+
+      // Attach toggle
+      const header = categoryDiv.querySelector('.gift-category-header');
+      header.addEventListener('click', () => {
+        const isOpen = categoryDiv.classList.contains('open');
+        // Close all others for cleaner mobile UX
+        document.querySelectorAll('.gift-category.open').forEach(el => {
+          if (el !== categoryDiv) {
+            el.classList.remove('open');
+            el.querySelector('.gift-category-header').setAttribute('aria-expanded', 'false');
+          }
+        });
+        categoryDiv.classList.toggle('open');
+        header.setAttribute('aria-expanded', String(!isOpen));
+      });
     });
 
-    // Re-attach button listeners
-    grid.querySelectorAll('.gift-btn:not(:disabled)').forEach(btn => {
+    // Attach presentear buttons
+    accordionContainer.querySelectorAll('.gift-btn:not(:disabled)').forEach(btn => {
       btn.addEventListener('click', () => {
         const id = Number(btn.dataset.id);
         openGiftModal(id);
@@ -349,7 +440,6 @@ document.addEventListener('DOMContentLoaded', () => {
         btnCopiarPix.textContent = 'Código copiado!';
         setTimeout(() => btnCopiarPix.textContent = original, 2000);
       } catch (e) {
-        // Fallback
         const ta = document.createElement('textarea');
         ta.value = currentBrCode;
         document.body.appendChild(ta);
@@ -384,8 +474,6 @@ document.addEventListener('DOMContentLoaded', () => {
     resetSucessoModal();
     openModal(modalSucesso);
     launchConfetti();
-
-    // Store for message sending
     modalSucesso.dataset.gift = JSON.stringify(gift);
     modalSucesso.dataset.nome = nome;
     modalSucesso.dataset.sobrenome = sobrenome;
@@ -425,11 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
 
-        // Mark as unavailable locally
         if (!unavailableIds.includes(gift.id)) {
           unavailableIds.push(gift.id);
         }
-        renderGifts();
+        renderAccordion();
 
         modalFinalMsg.classList.remove('hidden');
         btnEnviarRecado.classList.add('hidden');
@@ -441,24 +528,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Filter chips
-  filterButtons.forEach(btn => {
-    btn.addEventListener('click', () => {
-      filterButtons.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      currentFilter = btn.dataset.filter;
-      renderGifts();
-    });
-  });
-
-  // Search
-  if (searchInput) {
-    searchInput.addEventListener('input', (e) => {
-      currentSearch = e.target.value.trim();
-      renderGifts();
-    });
-  }
-
   // Fetch unavailable items from Google Apps Script
   async function loadUnavailable() {
     const url = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
@@ -466,7 +535,7 @@ document.addEventListener('DOMContentLoaded', () => {
       : '';
 
     if (!url) {
-      renderGifts();
+      renderAccordion();
       return;
     }
 
@@ -481,7 +550,6 @@ document.addEventListener('DOMContentLoaded', () => {
           })
           .map(row => (row.presente || row[3] || '').toString().trim());
 
-        // Mark matching gifts as unavailable by name
         giftsData.forEach(g => {
           if (purchasedNames.includes(g.name) && !unavailableIds.includes(g.id)) {
             unavailableIds.push(g.id);
@@ -491,7 +559,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) {
       // Silently fail and render all available
     }
-    renderGifts();
+    renderAccordion();
   }
 
   loadUnavailable();
@@ -524,8 +592,8 @@ document.addEventListener('DOMContentLoaded', () => {
       rsvpSubmit.disabled = true;
       rsvpSubmit.textContent = 'Enviando...';
 
-      const googleUrl = typeof process !== 'undefined' && process.env && process.env.GOOGLE_SHEETS_WEBHOOK_URL
-        ? process.env.GOOGLE_SHEETS_WEBHOOK_URL
+      const googleUrl = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
+        ? window.APP_CONFIG.googleSheetsWebhookUrl
         : '';
 
       try {
@@ -569,7 +637,6 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         }
 
-        // Confetti
         launchConfetti();
 
         rsvpMsg.classList.remove('hidden');
@@ -664,7 +731,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch(googleUrl + '?aba=recados');
       const data = await res.json();
       if (Array.isArray(data)) {
-        // Clear existing
         muralGrid.innerHTML = '';
         data.slice().reverse().forEach(r => {
           addPostIt(r.nome || r[1], r.mensagem || r[2], false);
