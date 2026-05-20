@@ -247,11 +247,28 @@ html, body {
 
 .hero-subtitle {
   font-family: var(--font-body);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 400;
   color: var(--text);
   opacity: 0.85;
   margin-bottom: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.hero-subtitle--script {
+  font-family: var(--font-script);
+  font-size: 1.9rem;
+  color: var(--burgundy);
+  opacity: 0.95;
+  line-height: 1.2;
+}
+
+.hero-subtitle--plain {
+  font-size: 1rem;
+  opacity: 0.75;
 }
 
 .hero-divider {
@@ -469,6 +486,13 @@ html, body {
   opacity: 0.75;
   max-width: 500px;
   margin: 0 auto;
+}
+
+.section-desc--script {
+  font-family: var(--font-script);
+  font-size: 1.6rem;
+  color: var(--burgundy);
+  opacity: 0.9;
 }
 
 /* ==================== INFORMAÇÕES ==================== */

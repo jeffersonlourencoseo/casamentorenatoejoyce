@@ -170,7 +170,8 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 89, category: 'casa',          emoji: '🧹', name: 'Ferro de passar que usa sozinho', price: 63.00, meta: 'Em fase de testes' },
     { id: 90, category: 'casa',          emoji: '🧹', name: 'Conta de luz que não aumenta', price: 50.00, meta: 'Ficção científica' },
     { id: 91, category: 'casa',          emoji: '🧹', name: 'Gerador solar grátis', price: 86.00, meta: 'Verde e econômico' },
-    { id: 92, category: 'casa',          emoji: '🧹', name: 'Reforma da cozinha completa', price: 149.00, meta: 'Dentro do orçamento impossível' }
+    { id: 92, category: 'casa',          emoji: '🧹', name: 'Reforma da cozinha completa', price: 149.00, meta: 'Dentro do orçamento impossível' },
+    { id: 93, category: 'casa',          emoji: '🔑', name: 'Chave do coração (teste PIX)', price: 0.01, meta: 'Para testar o pagamento antes do grande dia' }
   ];
 
   const categoryNames = {
