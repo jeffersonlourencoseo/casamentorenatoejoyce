@@ -267,8 +267,12 @@ html, body {
 }
 
 .hero-subtitle--plain {
-  font-size: 1rem;
-  opacity: 0.75;
+  font-family: var(--font-script);
+  font-size: 1.6rem;
+  color: var(--gold);
+  opacity: 0.9;
+  display: block;
+  margin-top: 2px;
 }
 
 .hero-divider {
