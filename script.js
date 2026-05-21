@@ -171,7 +171,12 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 90, category: 'casa',          emoji: '🧹', name: 'Conta de luz que não aumenta', price: 50.00, meta: 'Ficção científica' },
     { id: 91, category: 'casa',          emoji: '🧹', name: 'Gerador solar grátis', price: 86.00, meta: 'Verde e econômico' },
     { id: 92, category: 'casa',          emoji: '🧹', name: 'Reforma da cozinha completa', price: 149.00, meta: 'Dentro do orçamento impossível' },
-    { id: 93, category: 'casa',          emoji: '🔑', name: 'Chave do coração (teste PIX)', price: 0.01, meta: 'Para testar o pagamento antes do grande dia' }
+    { id: 93, category: 'casa',          emoji: '🔑', name: 'Chave do coração (teste PIX)', price: 0.01, meta: 'Para testar o pagamento antes do grande dia' },
+    { id: 94, category: 'casa',          emoji: '🎁', name: 'Café da manhã na cama (teste)', price: 0.01, meta: 'Presente de teste para o grande dia' },
+    { id: 95, category: 'casa',          emoji: '🎁', name: 'Jantar à luz de velas (teste)', price: 0.01, meta: 'Presente de teste para o grande dia' },
+    { id: 96, category: 'casa',          emoji: '🎁', name: 'Passeio de bike (teste)', price: 0.01, meta: 'Presente de teste para o grande dia' },
+    { id: 97, category: 'casa',          emoji: '🎁', name: 'Aula de culinária juntos (teste)', price: 0.01, meta: 'Presente de teste para o grande dia' },
+    { id: 98, category: 'casa',          emoji: '🎁', name: 'Cesta de piquenique (teste)', price: 0.01, meta: 'Presente de teste para o grande dia' }
   ];
 
   const categoryNames = {
