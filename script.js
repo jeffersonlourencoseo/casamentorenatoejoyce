@@ -543,25 +543,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (emailjsService && emailjsTemplate && emailjsPublicKey) {
           try {
-            await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            const emailBody = {
+              service_id: emailjsService,
+              template_id: emailjsTemplate,
+              user_id: emailjsPublicKey,
+              template_params: {
+                to_name: 'Renato & Joyce',
+                from_name: `${nome} ${sobrenome}`,
+                subject: `🎁 ${nome} comprou um presente!`,
+                message: `Presente: ${gift.name} (${formatPrice(gift.price)})\nRecado: ${recado || 'Nenhum recado'}`,
+                timestamp: new Date().toLocaleString('pt-BR')
+              }
+            };
+            console.log('Enviando email de presente:', emailBody);
+            const emailRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                service_id: emailjsService,
-                template_id: emailjsTemplate,
-                user_id: emailjsPublicKey,
-                template_params: {
-                  to_name: 'Renato & Joyce',
-                  from_name: `${nome} ${sobrenome}`,
-                  subject: `🎁 ${nome} comprou um presente!`,
-                  message: `Presente: ${gift.name} (${formatPrice(gift.price)})\nRecado: ${recado || 'Nenhum recado'}`,
-                  timestamp: new Date().toLocaleString('pt-BR')
-                }
-              })
+              body: JSON.stringify(emailBody)
             });
+            if (!emailRes.ok) {
+              const errText = await emailRes.text();
+              console.error('EmailJS erro:', emailRes.status, errText);
+            } else {
+              console.log('EmailJS presente enviado com sucesso');
+            }
           } catch (e) {
-            // Silently fail - email nao e critico
+            console.error('EmailJS exception:', e);
           }
+        } else {
+          console.warn('EmailJS nao configurado:', { emailjsService, emailjsTemplate, emailjsPublicKey });
         }
 
         modalFinalMsg.classList.remove('hidden');

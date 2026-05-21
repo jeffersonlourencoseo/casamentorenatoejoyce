@@ -80,25 +80,35 @@ module.exports = async (req, res) => {
 
   if (emailjsService && emailjsTemplate && emailjsPublicKey && presente) {
     try {
-      await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+      const emailBody = {
+        service_id: emailjsService,
+        template_id: emailjsTemplate,
+        user_id: emailjsPublicKey,
+        template_params: {
+          to_name: 'Renato & Joyce',
+          from_name: `${payerFirstName} ${payerLastName}`,
+          subject: `🎁 ${payerFirstName} comprou um presente!`,
+          message: `Presente: ${presente} (R$ ${transactionAmount})\nRecado: Nenhum (confirmado via webhook)`,
+          timestamp: new Date().toLocaleString('pt-BR')
+        }
+      };
+      console.log('Webhook enviando email:', emailBody);
+      const emailRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service_id: emailjsService,
-          template_id: emailjsTemplate,
-          user_id: emailjsPublicKey,
-          template_params: {
-            to_name: 'Renato & Joyce',
-            from_name: `${payerFirstName} ${payerLastName}`,
-            subject: `🎁 ${payerFirstName} comprou um presente!`,
-            message: `Presente: ${presente} (R$ ${transactionAmount})\nRecado: Nenhum (confirmado via webhook)`,
-            timestamp: new Date().toLocaleString('pt-BR')
-          }
-        })
+        body: JSON.stringify(emailBody)
       });
+      if (!emailRes.ok) {
+        const errText = await emailRes.text();
+        console.error('Webhook EmailJS erro:', emailRes.status, errText);
+      } else {
+        console.log('Webhook EmailJS enviado com sucesso');
+      }
     } catch (e) {
-      // Log but don't fail webhook
+      console.error('Webhook EmailJS exception:', e);
     }
+  } else {
+    console.warn('Webhook EmailJS nao configurado:', { emailjsService, emailjsTemplate, emailjsPublicKey, presente });
   }
 
   res.status(200).json({ ok: true });
