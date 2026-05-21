@@ -1,0 +1,160 @@
+============================================
+PASSO A PASSO - CONFIGURAR VERCEL (MERCADO PAGO)
+Casamento Renato & Joyce
+============================================
+
+O que voce precisa fazer agora:
+Configurar o Vercel para reconhecer o novo backend do Mercado Pago.
+
+
+============================================
+PASSO 1: ACESSAR O VERCEL
+============================================
+
+1. No computador, abra o navegador (Chrome, Edge, Firefox)
+2. Va para: https://vercel.com
+3. Faca login com a conta GitHub (a mesma que subiu o site)
+4. Voce vera o projeto: casamentorenatoejoyce
+5. Clique no projeto para abrir
+
+
+============================================
+PASSO 2: ADICIONAR A VARIAVEL DE AMBIENTE
+============================================
+
+A variavel de ambiente e onde o Vercel guarda senhas e tokens de forma segura.
+
+1. Dentro do projeto, clique em "Settings" (engrenagem no topo da pagina)
+2. No menu lateral esquerdo, clique em "Environment Variables"
+3. Voce vera uma lista de variaveis ja existentes (pode ter OPENPIX_APP_ID)
+4. Clique em "Add" ou no botao "+" (depende da interface)
+5. Preencha os campos:
+
+   Name (nome):  MERCADO_PAGO_ACCESS_TOKEN
+   Value (valor): APP_USR-3914855642368437-052020-7263d35474d136e07371544ba254215f-271945300
+
+6. Clique em "Save" (salvar)
+7. A nova variavel aparecera na lista
+
+
+============================================
+PASSO 3: REMOVER A VARIAVEL ANTIGA (OPCIONAL)
+============================================
+
+Como nao vamos mais usar a OpenPix, pode remover a variavel antiga.
+
+1. Na lista de "Environment Variables", procure por: OPENPIX_APP_ID
+2. Clique nos "3 pontinhos" (ou icone de lixeira) ao lado dela
+3. Clique em "Remove" ou "Delete" (remover)
+4. Confirme
+
+
+============================================
+PASSO 4: REDEPLOY (REIMPLANTAR)
+============================================
+
+O "Redeploy" faz o site "reiniciar" com as novas configuracoes.
+
+1. No topo da pagina, clique na aba: "Deployments" (Implantacoes)
+2. Voce vera uma lista com os deploys anteriores
+3. O primeiro da lista e o mais recente
+4. Clique nos "3 pontinhos" (⋮) ao lado do deploy mais recente
+5. Escolha: "Redeploy" (Reimplantar)
+6. Confirme clicando novamente em "Redeploy"
+7. Aguarde 1 a 2 minutos
+8. O status ficara "Ready" (Pronto) quando terminar
+
+
+============================================
+PASSO 5: TESTAR O PIX
+============================================
+
+Depois do redeploy, teste se o PIX esta funcionando:
+
+1. No celular, acesse o site:
+   https://casamentorenatoejoyce.vercel.app/
+
+2. Va em "Lista de Presentes"
+
+3. Abra a categoria: "Casa"
+
+4. Procure o presente:
+   "Chave do coracao (teste PIX)" - R$ 0,01
+
+5. Clique em: "Presentear"
+
+6. Preencha:
+   - Nome: (seu nome)
+   - Sobrenome: (seu sobrenome)
+
+7. Clique em: "Gerar PIX"
+
+8. Se aparecer:
+   - Um QR Code para escanear
+   - Um botao "Copiar codigo PIX"
+   - Significa que esta funcionando!
+
+9. Pague os R$ 0,01 pelo app do banco para testar o fluxo completo
+
+10. Apos pagar, o site deve:
+    - Fechar o modal de PIX
+    - Abrir o modal de sucesso com confetes
+    - Perguntar se quer deixar um recado
+    - Salvar na planilha Google Sheets
+    - Enviar email para voces via EmailJS
+
+
+============================================
+O QUE ACONTECE ATRAS DOS PANOS
+============================================
+
+1. Convidado clica "Gerar PIX"
+2. O site chama a API do Mercado Pago (backend no Vercel)
+3. Mercado Pago cria uma cobranca PIX
+4. O site recebe o QR Code e mostra na tela
+5. Convidado paga pelo app do banco
+6. O Mercado Pago notifica o site (webhook)
+7. O site marca o presente como "comprado"
+8. Aparece o modal de sucesso para o convidado
+
+
+============================================
+PROBLEMAS COMUNS
+============================================
+
+PROBLEMA: O botao "Gerar PIX" nao faz nada
+SOLUCAO: Aguarde 2 minutos apos o redeploy. Se persistir, verifique
+         se a variavel MERCADO_PAGO_ACCESS_TOKEN foi salva corretamente
+         em Settings > Environment Variables.
+
+PROBLEMA: Aparece "Erro ao gerar PIX"
+SOLUCAO: Verifique se o Access Token esta correto e completo.
+         Va em Settings > Environment Variables e compare com o token
+         original: APP_USR-3914855642368437-052020-7263d35474d136e07371544ba254215f-271945300
+
+PROBLEMA: QR Code aparece mas o pagamento nao confirma
+SOLUCAO: O Mercado Pago pode demorar alguns segundos para confirmar.
+         O site verifica automaticamente a cada 3 segundos.
+         Se demorar mais de 2 minutos, pode ser que a conta Mercado Pago
+         ainda nao esta totalmente ativada (pode precisar confirmar documentos).
+
+PROBLEMA: O email nao chegou
+SOLUCAO: Verifique a pasta SPAM/LIXO do Gmail.
+         Adicione noreply@emailjs.com aos contatos seguros.
+
+
+============================================
+RESUMO
+============================================
+
+1. Va em https://vercel.com > projeto casamentorenatoejoyce
+2. Settings > Environment Variables > Add
+3. Adicione: MERCADO_PAGO_ACCESS_TOKEN = (o token que voce tem)
+4. (Opcional) Remova OPENPIX_APP_ID
+5. Deployments > Redeploy
+6. Teste no celular comprando o presente de R$ 0,01
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================
