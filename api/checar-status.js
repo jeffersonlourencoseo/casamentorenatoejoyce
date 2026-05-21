@@ -6,32 +6,36 @@ module.exports = async (req, res) => {
 
   const { id } = req.query || {};
   if (!id) {
-    res.status(400).json({ error: 'correlationID ausente' });
+    res.status(400).json({ error: 'paymentId ausente' });
     return;
   }
 
-  const appId = process.env.OPENPIX_APP_ID;
-  if (!appId) {
-    res.status(500).json({ error: 'OPENPIX_APP_ID não configurado' });
+  const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
+  if (!accessToken) {
+    res.status(500).json({ error: 'MERCADO_PAGO_ACCESS_TOKEN não configurado' });
     return;
   }
 
   try {
-    const response = await fetch(`https://api.openpix.com.br/api/v2/charge/${encodeURIComponent(id)}`, {
+    const response = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(id)}`, {
       method: 'GET',
       headers: {
-        'Authorization': appId
+        'Authorization': `Bearer ${accessToken}`
       }
     });
 
     const data = await response.json();
     if (!response.ok) {
-      res.status(response.status).json({ error: data.message || 'Erro OpenPix' });
+      res.status(response.status).json({ error: data.message || 'Erro ao consultar pagamento' });
       return;
     }
 
-    const charge = data.charge || data;
-    res.status(200).json({ status: charge.status || 'ACTIVE' });
+    const mpStatus = data.status || 'pending';
+    let status = 'PENDING';
+    if (mpStatus === 'approved') status = 'COMPLETED';
+    else if (mpStatus === 'cancelled' || mpStatus === 'rejected') status = 'EXPIRED';
+
+    res.status(200).json({ status });
   } catch (e) {
     res.status(500).json({ error: e.message || 'Erro interno' });
   }

@@ -1,29 +1,48 @@
-const crypto = require('crypto');
-
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
     return;
   }
 
-  const secret = process.env.OPENPIX_WEBHOOK_SECRET;
-  if (secret) {
-    const hmacHeader = req.headers['x-webhook-hmac'] || '';
-    const bodyString = JSON.stringify(req.body);
-    const expected = crypto.createHmac('sha256', secret).update(bodyString).digest('hex');
-    // Time-safe compare is not critical here but nice
-    if (hmacHeader !== expected) {
-      res.status(401).json({ error: 'Assinatura inválida' });
-      return;
-    }
-  }
+  const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
 
-  const { correlationID, status } = req.body || {};
-  if (!correlationID || status !== 'COMPLETED') {
+  // Mercado Pago webhook body
+  const { type, data } = req.body || {};
+
+  // Extract payment ID
+  let paymentId = null;
+  if (data && data.id) paymentId = String(data.id);
+
+  if (!paymentId) {
     res.status(200).json({ ok: true });
     return;
   }
 
+  // Verify payment is approved via API
+  let isApproved = false;
+  if (accessToken) {
+    try {
+      const response = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`
+        }
+      });
+      const paymentData = await response.json();
+      if (response.ok && paymentData.status === 'approved') {
+        isApproved = true;
+      }
+    } catch (e) {
+      // Silently fail
+    }
+  }
+
+  if (!isApproved) {
+    res.status(200).json({ ok: true });
+    return;
+  }
+
+  // Mark in Google Sheets
   const googleUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
   if (googleUrl) {
     try {
@@ -31,8 +50,13 @@ module.exports = async (req, res) => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          action: 'markPurchased',
-          correlationID,
+          presente: '',
+          nome: '',
+          sobrenome: '',
+          valor: '',
+          recado: '',
+          status: 'COMPLETED',
+          correlationID: paymentId,
           timestamp: new Date().toISOString()
         })
       });
@@ -56,7 +80,7 @@ module.exports = async (req, res) => {
           template_id: emailjsTemplate,
           user_id: emailjsPublicKey,
           template_params: {
-            correlation_id: correlationID,
+            correlation_id: paymentId,
             timestamp: new Date().toLocaleString('pt-BR')
           }
         })
