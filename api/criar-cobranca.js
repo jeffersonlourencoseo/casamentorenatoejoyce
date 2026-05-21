@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
           first_name: nome,
           last_name: sobrenome
         },
-        notification_url: `${req.headers.origin || ''}/api/pix-confirmado`
+        notification_url: `${process.env.BASE_URL || req.headers.origin || ''}/api/pix-confirmado`
       })
     });
 

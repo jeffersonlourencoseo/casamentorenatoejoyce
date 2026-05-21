@@ -42,18 +42,26 @@ module.exports = async (req, res) => {
     return;
   }
 
+  // Extract gift info from Mercado Pago payment data
+  const description = paymentData.description || '';
+  const presenteMatch = description.match(/Presente: (.*?) -/);
+  const presente = presenteMatch ? presenteMatch[1].trim() : '';
+  const payerFirstName = paymentData.payer?.first_name || '';
+  const payerLastName = paymentData.payer?.last_name || '';
+  const transactionAmount = paymentData.transaction_amount || '';
+
   // Mark in Google Sheets
   const googleUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
-  if (googleUrl) {
+  if (googleUrl && presente) {
     try {
       await fetch(googleUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({
-          presente: '',
-          nome: '',
-          sobrenome: '',
-          valor: '',
+          presente,
+          nome: payerFirstName,
+          sobrenome: payerLastName,
+          valor: transactionAmount,
           recado: '',
           status: 'COMPLETED',
           correlationID: paymentId,
@@ -70,7 +78,7 @@ module.exports = async (req, res) => {
   const emailjsTemplate = process.env.EMAILJS_TEMPLATE_PRESENTE;
   const emailjsPublicKey = process.env.EMAILJS_PUBLIC_KEY;
 
-  if (emailjsService && emailjsTemplate && emailjsPublicKey) {
+  if (emailjsService && emailjsTemplate && emailjsPublicKey && presente) {
     try {
       await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
@@ -80,8 +88,10 @@ module.exports = async (req, res) => {
           template_id: emailjsTemplate,
           user_id: emailjsPublicKey,
           template_params: {
-            correlation_id: paymentId,
-            timestamp: new Date().toLocaleString('pt-BR')
+            to_name: 'Renato & Joyce',
+            from_name: `${payerFirstName} ${payerLastName}`,
+            subject: `🎁 ${payerFirstName} comprou um presente!`,
+            message: `${payerFirstName} ${payerLastName} comprou: ${presente} (R$ ${transactionAmount}). O pagamento foi confirmado via webhook.`
           }
         })
       });
