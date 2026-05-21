@@ -91,8 +91,7 @@ module.exports = async (req, res) => {
             to_name: 'Renato & Joyce',
             from_name: `${payerFirstName} ${payerLastName}`,
             subject: `🎁 ${payerFirstName} comprou um presente!`,
-            presente: `${presente} (R$ ${transactionAmount})`,
-            recado: 'Nenhum recado (confirmado via webhook)',
+            message: `Presente: ${presente} (R$ ${transactionAmount})\nRecado: Nenhum (confirmado via webhook)`,
             timestamp: new Date().toLocaleString('pt-BR')
           }
         })

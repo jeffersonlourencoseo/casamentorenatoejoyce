@@ -544,8 +544,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   to_name: 'Renato & Joyce',
                   from_name: `${nome} ${sobrenome}`,
                   subject: `🎁 ${nome} comprou um presente!`,
-                  presente: `${gift.name} (${formatPrice(gift.price)})`,
-                  recado: recado || 'Nenhum recado',
+                  message: `Presente: ${gift.name} (${formatPrice(gift.price)})\nRecado: ${recado || 'Nenhum recado'}`,
                   timestamp: new Date().toLocaleString('pt-BR')
                 }
               })
