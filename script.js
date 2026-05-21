@@ -502,7 +502,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (url) {
           await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({
               timestamp: new Date().toISOString(),
               nome,
@@ -601,7 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (googleUrl) {
           await fetch(googleUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({
               aba: 'confirmacoes',
               timestamp: new Date().toISOString(),
@@ -623,7 +623,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emailjsService && emailjsTemplate && emailjsPublicKey) {
           await fetch('https://api.emailjs.com/api/v1.0/email/send', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({
               service_id: emailjsService,
               template_id: emailjsTemplate,
@@ -762,7 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (googleUrl) {
           await fetch(googleUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'text/plain' },
             body: JSON.stringify({
               aba: 'recados',
               timestamp: new Date().toISOString(),
