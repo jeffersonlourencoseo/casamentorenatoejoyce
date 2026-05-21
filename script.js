@@ -212,11 +212,10 @@ document.addEventListener('DOMContentLoaded', () => {
     return `
       <div class="gift-card ${isUnavailable ? 'unavailable' : ''}">
         <div class="gift-emoji">${g.emoji}</div>
-        <div class="gift-name">${g.name}</div>
+        <div class="gift-name">${g.name}${isUnavailable ? ' <span class="gift-unavailable-label">INDISPONÍVEL</span>' : ''}</div>
         <div class="gift-meta">${g.meta}</div>
         <div class="gift-price">${formatPrice(g.price)}</div>
-        ${isUnavailable ? '<div class="gift-badge">INDISPONÍVEL 🔒</div>' : ''}
-        <button class="gift-btn" ${isUnavailable ? 'disabled' : ''} data-id="${g.id}">Presentear 💛</button>
+        ${isUnavailable ? '' : `<button class="gift-btn" data-id="${g.id}">Presentear 💛</button>`}
       </div>
     `;
   }
@@ -628,7 +627,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emailjsService && emailjsTemplate && emailjsPublicKey) {
           await fetch('https://api.emailjs.com/api/v1.0/email/send', {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
               service_id: emailjsService,
               template_id: emailjsTemplate,

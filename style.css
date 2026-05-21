@@ -736,6 +736,20 @@ html, body {
   box-shadow: none;
 }
 
+.gift-unavailable-label {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  border-radius: 50px;
+  background: #eee;
+  color: #999;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  vertical-align: middle;
+}
+
 .gift-empty {
   grid-column: 1 / -1;
   text-align: center;
