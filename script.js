@@ -544,7 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
                   to_name: 'Renato & Joyce',
                   from_name: `${nome} ${sobrenome}`,
                   subject: `🎁 ${nome} comprou um presente!`,
-                  message: `${nome} ${sobrenome} comprou: ${gift.name} (${formatPrice(gift.price)}). Recado: ${recado || 'Nenhum recado'}`
+                  message: `${gift.name} (${formatPrice(gift.price)}) | Recado: ${recado || 'Nenhum recado'}`,
+                  timestamp: new Date().toLocaleString('pt-BR')
                 }
               })
             });
@@ -670,7 +671,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 to_name: 'Renato & Joyce',
                 from_name: `${nome} ${sobrenome}`,
                 subject: `✅ ${nome} confirmou presença!`,
-                message: `${nome} ${sobrenome} confirmou. Resposta: ${rsvpChoice}`
+                message: `Confirmou presença: ${rsvpChoice}`,
+                timestamp: new Date().toLocaleString('pt-BR')
               }
             })
           });
