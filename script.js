@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /* ---------------- Countdown ---------------- */
-  const targetDate = new Date('2026-02-14T17:00:00-03:00'); // Rio timezone
+  const targetDate = new Date('2026-09-24T17:00:00-03:00'); // Rio timezone
 
   function pad(n) {
     return String(n).padStart(2, '0');
