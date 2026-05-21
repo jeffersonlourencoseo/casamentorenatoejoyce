@@ -634,7 +634,7 @@ html, body {
 }
 
 .gift-category.open .gift-category-body {
-  max-height: 3000px;
+  max-height: 6000px;
   padding: 0 16px 16px;
 }
 
