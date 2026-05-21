@@ -523,6 +523,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         renderAccordion();
 
+        // Enviar email de notificacao de presente via EmailJS
+        const emailjsService = window.APP_CONFIG && window.APP_CONFIG.emailjsServiceId
+          ? window.APP_CONFIG.emailjsServiceId : '';
+        const emailjsTemplate = window.APP_CONFIG && window.APP_CONFIG.emailjsTemplatePresente
+          ? window.APP_CONFIG.emailjsTemplatePresente : '';
+        const emailjsPublicKey = window.APP_CONFIG && window.APP_CONFIG.emailjsPublicKey
+          ? window.APP_CONFIG.emailjsPublicKey : '';
+
+        if (emailjsService && emailjsTemplate && emailjsPublicKey) {
+          try {
+            await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                service_id: emailjsService,
+                template_id: emailjsTemplate,
+                user_id: emailjsPublicKey,
+                template_params: {
+                  to_name: 'Renato & Joyce',
+                  from_name: `${nome} ${sobrenome}`,
+                  subject: `🎁 ${nome} comprou um presente!`,
+                  message: `${nome} ${sobrenome} comprou: ${gift.name} (${formatPrice(gift.price)}). Recado: ${recado || 'Nenhum recado'}`
+                }
+              })
+            });
+          } catch (e) {
+            // Silently fail - email nao e critico
+          }
+        }
+
         modalFinalMsg.classList.remove('hidden');
         btnEnviarRecado.classList.add('hidden');
       } catch (err) {
@@ -778,6 +808,36 @@ document.addEventListener('DOMContentLoaded', () => {
               mensagem
             })
           });
+        }
+
+        // Enviar email de notificacao de recado via EmailJS
+        const emailjsService = window.APP_CONFIG && window.APP_CONFIG.emailjsServiceId
+          ? window.APP_CONFIG.emailjsServiceId : '';
+        const emailjsTemplate = window.APP_CONFIG && window.APP_CONFIG.emailjsTemplateRsvp
+          ? window.APP_CONFIG.emailjsTemplateRsvp : '';
+        const emailjsPublicKey = window.APP_CONFIG && window.APP_CONFIG.emailjsPublicKey
+          ? window.APP_CONFIG.emailjsPublicKey : '';
+
+        if (emailjsService && emailjsTemplate && emailjsPublicKey) {
+          try {
+            await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                service_id: emailjsService,
+                template_id: emailjsTemplate,
+                user_id: emailjsPublicKey,
+                template_params: {
+                  to_name: 'Renato & Joyce',
+                  from_name: nome,
+                  subject: `💌 Novo recado no mural de ${nome}!`,
+                  message: `${nome} deixou um recado no mural: "${mensagem}"`
+                }
+              })
+            });
+          } catch (e) {
+            // Silently fail - email nao e critico
+          }
         }
 
         addPostIt(nome, mensagem, true);
