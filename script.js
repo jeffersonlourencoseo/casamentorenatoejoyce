@@ -761,24 +761,48 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function loadRecados() {
+    if (!muralGrid) return;
+
+    // Primeiro carrega do localStorage para nao ficar vazio ao atualizar
+    let localRecados = [];
+    try {
+      const saved = localStorage.getItem('rj_mural_recados');
+      if (saved) localRecados = JSON.parse(saved);
+    } catch (e) {}
+
+    if (localRecados.length > 0) {
+      muralGrid.innerHTML = '';
+      localRecados.slice().reverse().forEach(r => {
+        if (r.nome && r.mensagem) addPostIt(r.nome, r.mensagem, false);
+      });
+    }
+
     const googleUrl = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
       ? window.APP_CONFIG.googleSheetsWebhookUrl
       : '';
-    if (!googleUrl || !muralGrid) return;
+    if (!googleUrl) return;
 
     try {
       const res = await fetch(googleUrl + '?aba=recados');
       const data = await res.json();
-      if (Array.isArray(data)) {
+      console.log('Mural recados response:', data);
+
+      if (Array.isArray(data) && data.length > 0) {
         muralGrid.innerHTML = '';
-        data.slice().reverse().forEach(r => {
+        const recadosParaSalvar = [];
+        data.forEach(r => {
           const nome = (r.nome || r.Nome || r.NOME || r[1] || '').toString().trim();
           const mensagem = (r.mensagem || r.Mensagem || r.MENSAGEM || r[2] || '').toString().trim();
-          if (nome && mensagem) addPostIt(nome, mensagem, false);
+          if (nome && mensagem) {
+            recadosParaSalvar.push({ nome, mensagem });
+          }
         });
+        // Renderiza do mais antigo ao mais novo
+        recadosParaSalvar.forEach(r => addPostIt(r.nome, r.mensagem, false));
+        localStorage.setItem('rj_mural_recados', JSON.stringify(recadosParaSalvar));
       }
     } catch (e) {
-      // Silently fail
+      console.error('Erro ao carregar recados:', e);
     }
   }
 
@@ -845,6 +869,15 @@ document.addEventListener('DOMContentLoaded', () => {
         addPostIt(nome, mensagem, true);
         muralNome.value = '';
         muralMensagem.value = '';
+
+        // Salva no localStorage para persistencia entre atualizacoes
+        try {
+          const saved = JSON.parse(localStorage.getItem('rj_mural_recados') || '[]');
+          saved.push({ nome, mensagem });
+          localStorage.setItem('rj_mural_recados', JSON.stringify(saved));
+        } catch (e) {
+          // Silently fail
+        }
       } catch (err) {
         alert('Erro ao enviar recado. Tente novamente.');
       } finally {
