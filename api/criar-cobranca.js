@@ -16,7 +16,12 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const payerEmail = `${nome.toLowerCase().replace(/\s/g, '')}.${sobrenome.toLowerCase().replace(/\s/g, '')}@convidado.casamento`;
+  const sanitize = str => str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9]/g, '');
+  const payerEmail = `${sanitize(nome)}.${sanitize(sobrenome)}@email.com`;
 
   try {
     const response = await fetch('https://api.mercadopago.com/v1/payments', {
