@@ -1,0 +1,10 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:20260214T170000
+DTEND:20260214T230000
+SUMMARY:Casamento Renato & Joyce
+DESCRIPTION:Casamento Renato & Joyce
+LOCATION:Espaço Villa Jardim, Rua das Orquídeas, 240, Barra da Tijuca, Rio de Janeiro
+END:VEVENT
+END:VCALENDAR
