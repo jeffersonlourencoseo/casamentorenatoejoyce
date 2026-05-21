@@ -1,6 +1,16 @@
 // Renato & Joyce — Main Script v2 (Accordion gifts)
 
 document.addEventListener('DOMContentLoaded', () => {
+  /* ---------------- Preloader ---------------- */
+  const preloader = document.getElementById('preloader');
+  if (preloader) {
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        preloader.classList.add('hidden');
+      }, 1200);
+    });
+  }
+
   /* ---------------- Nav scroll + hamburger ---------------- */
   const navFixed = document.getElementById('nav-fixed');
   const navToggle = document.getElementById('nav-toggle');
