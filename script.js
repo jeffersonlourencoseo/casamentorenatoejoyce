@@ -772,7 +772,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (Array.isArray(data)) {
         muralGrid.innerHTML = '';
         data.slice().reverse().forEach(r => {
-          addPostIt(r.nome || r[1], r.mensagem || r[2], false);
+          const nome = (r.nome || r.Nome || r.NOME || r[1] || '').toString().trim();
+          const mensagem = (r.mensagem || r.Mensagem || r.MENSAGEM || r[2] || '').toString().trim();
+          if (nome && mensagem) addPostIt(nome, mensagem, false);
         });
       }
     } catch (e) {
