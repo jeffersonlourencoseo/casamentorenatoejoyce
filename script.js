@@ -547,13 +547,17 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const res = await fetch(url + '?aba=presentes');
       const data = await res.json();
-      if (Array.isArray(data)) {
+      if (Array.isArray(data) && data.length > 0) {
         const purchasedNames = data
           .filter(row => {
-            const status = (row.status || row[6] || '').toString().toUpperCase();
+            const status = (
+              row.Status || row.status || row.STATUS || row[6] || ''
+            ).toString().toUpperCase();
             return status === 'COMPLETED';
           })
-          .map(row => (row.presente || row[3] || '').toString().trim());
+          .map(row => (
+            row.Presente || row.presente || row.PRESENTE || row[3] || ''
+          ).toString().trim());
 
         giftsData.forEach(g => {
           if (purchasedNames.includes(g.name) && !unavailableIds.includes(g.id)) {
