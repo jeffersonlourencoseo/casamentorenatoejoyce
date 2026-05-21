@@ -366,31 +366,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  /* ---------------- Modal Agenda ---------------- */
-  const modalAgenda     = document.getElementById('modal-agenda');
-  const btnAddAgenda    = document.getElementById('btn-add-agenda');
-  const modalCloseAgenda = document.getElementById('modal-close-agenda');
-
-  if (btnAddAgenda && modalAgenda) {
-    btnAddAgenda.addEventListener('click', () => {
-      openModal(modalAgenda);
-    });
-  }
-
-  if (modalCloseAgenda && modalAgenda) {
-    modalCloseAgenda.addEventListener('click', () => {
-      closeModal(modalAgenda);
-    });
-  }
-
-  if (modalAgenda) {
-    modalAgenda.addEventListener('click', (e) => {
-      if (e.target === modalAgenda) {
-        closeModal(modalAgenda);
-      }
-    });
-  }
-
   // Gerar PIX
   if (btnGerarPix) {
     btnGerarPix.addEventListener('click', async () => {

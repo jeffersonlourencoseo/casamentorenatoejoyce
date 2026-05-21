@@ -1243,23 +1243,6 @@ html, body {
   }
 }
 
-/* ==================== MODAL AGENDA ==================== */
-.agenda-options {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.agenda-btn {
-  width: 100%;
-  text-align: center;
-}
-
-.modal--agenda {
-  padding: 28px 20px;
-}
-
 /* ==================== TELAS MUITO PEQUENAS ==================== */
 @media (max-width: 360px) {
   .container {
