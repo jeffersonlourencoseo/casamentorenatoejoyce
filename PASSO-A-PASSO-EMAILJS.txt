@@ -131,48 +131,28 @@ A Public Key identifica sua conta no EmailJS.
 
 
 ============================================
-PASSO 5: INFORMAR OS DADOS AO DESENVOLVEDOR
+PASSO 5: CONFIGURAR NO VERCEL (BACKEND)
 ============================================
 
-Apos completar os passos acima, voce tera 4 informacoes:
+Agora os dados do EmailJS ficam apenas no servidor, nao mais no frontend.
 
-1. Service ID: _______________________
-2. Template ID (RSVP): _______________________
-3. Template ID (Presente): _______________________
-4. Public Key: _______________________
+1. Va para https://vercel.com e abra o projeto
+2. Clique em "Settings" > "Environment Variables"
+3. Adicione as seguintes variaveis:
 
-Envie essas 4 informacoes para que o desenvolvedor atualize o site.
+   Name: EMAILJS_SERVICE_ID
+   Value: (seu Service ID do passo 2)
 
+   Name: EMAILJS_TEMPLATE_PRESENTE
+   Value: (seu Template ID de presente do passo 3)
 
-============================================
-PASSO 6: COLOCAR OS DADOS NO SITE (opcional)
-============================================
+   Name: EMAILJS_TEMPLATE_RSVP
+   Value: (seu Template ID de RSVP do passo 3)
 
-Se preferir, voce mesmo pode colocar os dados no arquivo index.html:
+   Name: EMAILJS_PUBLIC_KEY
+   Value: (sua Public Key do passo 4)
 
-1. Abra o arquivo index.html na pasta do projeto
-2. Procure por esta parte (proximo do final):
-
-   window.APP_CONFIG = {
-     googleSheetsWebhookUrl: '...',
-     emailjsServiceId: '',
-     emailjsTemplatePresente: '',
-     emailjsTemplateRsvp: '',
-     emailjsPublicKey: ''
-   };
-
-3. Preencha entre as aspas:
-
-   window.APP_CONFIG = {
-     googleSheetsWebhookUrl: '...',
-     emailjsServiceId: 'SEU_SERVICE_ID',
-     emailjsTemplatePresente: 'SEU_TEMPLATE_PRESENTE',
-     emailjsTemplateRsvp: 'SEU_TEMPLATE_RSVP',
-     emailjsPublicKey: 'SUA_PUBLIC_KEY'
-   };
-
-4. Salve o arquivo
-5. Envie para o GitHub: git add -A && git commit -m "Adiciona EmailJS" && git push origin main
+4. Va em "Deployments" e clique em "Redeploy" no deploy mais recente
 
 
 ============================================

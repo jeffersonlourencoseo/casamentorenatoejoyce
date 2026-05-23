@@ -4,12 +4,17 @@ module.exports = async (req, res) => {
     return;
   }
 
+  /* ---------- Validacao de origem (query secret) ---------- */
+  const expectedSecret = process.env.WEBHOOK_SECRET;
+  const receivedSecret = req.query?.secret || '';
+
+  if (!expectedSecret || receivedSecret !== expectedSecret) {
+    res.status(401).json({ error: 'Unauthorized' });
+    return;
+  }
+
   const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN;
-
-  // Mercado Pago webhook body
-  const { type, data } = req.body || {};
-
-  // Extract payment ID
+  const { data } = req.body || {};
   let paymentId = null;
   if (data && data.id) paymentId = String(data.id);
 
@@ -18,8 +23,10 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Verify payment is approved via API
+  // Verificar pagamento na API do Mercado Pago
   let isApproved = false;
+  let paymentData = {};
+
   if (accessToken) {
     try {
       const response = await fetch(`https://api.mercadopago.com/v1/payments/${encodeURIComponent(paymentId)}`, {
@@ -28,7 +35,7 @@ module.exports = async (req, res) => {
           'Authorization': `Bearer ${accessToken}`
         }
       });
-      const paymentData = await response.json();
+      paymentData = await response.json();
       if (response.ok && paymentData.status === 'approved') {
         isApproved = true;
       }
@@ -42,7 +49,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  // Extract gift info from Mercado Pago payment data
+  // Extrair dados do presente
   const description = paymentData.description || '';
   const presenteMatch = description.match(/Presente: (.*?) -/);
   const presente = presenteMatch ? presenteMatch[1].trim() : '';
@@ -50,14 +57,17 @@ module.exports = async (req, res) => {
   const payerLastName = paymentData.payer?.last_name || '';
   const transactionAmount = paymentData.transaction_amount || '';
 
-  // Mark in Google Sheets
+  // Salvar no Google Sheets via proxy seguro (com token)
   const googleUrl = process.env.GOOGLE_SHEETS_WEBHOOK_URL;
+  const scriptToken = process.env.SCRIPT_TOKEN;
+
   if (googleUrl && presente) {
     try {
       await fetch(googleUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain' },
         body: JSON.stringify({
+          token: scriptToken,
           presente,
           nome: payerFirstName,
           sobrenome: payerLastName,
@@ -70,10 +80,11 @@ module.exports = async (req, res) => {
       });
     } catch (e) {
       // Log but don't fail webhook
+      console.error('Erro ao salvar no Sheets:', e.message);
     }
   }
 
-  // EmailJS notification
+  // Notificacao EmailJS
   const emailjsService = process.env.EMAILJS_SERVICE_ID;
   const emailjsTemplate = process.env.EMAILJS_TEMPLATE_PRESENTE;
   const emailjsPublicKey = process.env.EMAILJS_PUBLIC_KEY;
@@ -92,7 +103,6 @@ module.exports = async (req, res) => {
           timestamp: new Date().toLocaleString('pt-BR')
         }
       };
-      console.log('Webhook enviando email:', emailBody);
       const emailRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -101,14 +111,10 @@ module.exports = async (req, res) => {
       if (!emailRes.ok) {
         const errText = await emailRes.text();
         console.error('Webhook EmailJS erro:', emailRes.status, errText);
-      } else {
-        console.log('Webhook EmailJS enviado com sucesso');
       }
     } catch (e) {
       console.error('Webhook EmailJS exception:', e);
     }
-  } else {
-    console.warn('Webhook EmailJS nao configurado:', { emailjsService, emailjsTemplate, emailjsPublicKey, presente });
   }
 
   res.status(200).json({ ok: true });

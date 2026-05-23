@@ -33,8 +33,18 @@ A variavel de ambiente e onde o Vercel guarda senhas e tokens de forma segura.
    Name (nome):  MERCADO_PAGO_ACCESS_TOKEN
    Value (valor): APP_USR-3914855642368437-052020-7263d35474d136e07371544ba254215f-271945300
 
-6. Clique em "Save" (salvar)
-7. A nova variavel aparecera na lista
+6. Clique em "Add" novamente e adicione:
+
+   Name (nome):  WEBHOOK_SECRET
+   Value (valor): 7a2995d94f285a0bdbf69d2973463b4e5f16dab5b28eed17cc7231126a9feae6
+
+7. Clique em "Add" novamente e adicione:
+
+   Name (nome):  SCRIPT_TOKEN
+   Value (valor): dbff0390e87aa29052ec5a093f643c058a99c601fbde917ff36f5d919f61d765
+
+8. Clique em "Save" (salvar)
+9. As novas variaveis aparecerao na lista
 
 
 ============================================

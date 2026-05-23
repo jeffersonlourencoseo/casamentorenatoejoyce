@@ -1,3 +1,31 @@
+============================================
+PASSO A PASSO - GOOGLE APPS SCRIPT
+Casamento Renato & Joyce
+============================================
+
+O que voce vai fazer:
+1. Abrir o editor do Apps Script (dentro do Google Sheets)
+2. Apagar o codigo antigo
+3. Colar este codigo novo
+4. Configurar 2 propriedades secretas
+5. Publicar o Web App novamente
+
+============================================
+COMO ABRIR O EDITOR
+============================================
+
+1. Abra sua planilha no Google Sheets:
+   https://docs.google.com/spreadsheets/d/1m870IB8_uk8vIjzIsdECHfgGN62I5LXKPR4uGyYEguI/edit
+
+2. No menu superior da planilha, clique em:
+   Extensions > Apps Script
+
+3. Vai abrir uma nova aba com o editor de codigo.
+
+============================================
+O CODIGO NOVO (copie tudo abaixo)
+============================================
+
 /**
  * Google Apps Script - Renato & Joyce
  * Web App: Executar como "Eu", Acesso "Qualquer pessoa"
@@ -121,7 +149,6 @@ function doPost(e) {
       return jsonResponse({ success: true });
     }
 
-    // Webhook fallback (presente confirmado)
     if (body.presente) {
       var sheet = getSheet('presentes');
       sheet.appendRow([
@@ -143,3 +170,69 @@ function doPost(e) {
     return jsonResponse({ error: err.message });
   }
 }
+
+
+============================================
+COMO COPIAR NO EDITOR
+============================================
+
+1. No editor do Apps Script, clique dentro da area de codigo
+2. Aperte Ctrl+A para selecionar tudo (ou Cmd+A no Mac)
+3. Aperte Delete para apagar
+4. Copie o codigo acima (Ctrl+C)
+5. Cole no editor (Ctrl+V)
+6. Clique no icone de disquete (ou Ctrl+S) para salvar
+
+============================================
+CONFIGURAR AS PROPRIEDADES SECRETAS
+============================================
+
+Depois de salvar o codigo:
+
+1. No lado ESQUERDO do editor, clique na ENGRENAGEM:
+   "Project Settings"
+
+2. Procure por "Script Properties"
+
+3. Clique em "Add script property" (ou "+" depende da interface)
+
+4. Adicione as 2 propriedades abaixo EXATAMENTE assim:
+
+   Propriedade 1:
+   - Property: SHEET_ID
+   - Value: 1m870IB8_uk8vIjzIsdECHfgGN62I5LXKPR4uGyYEguI
+
+   Propriedade 2:
+   - Property: SCRIPT_TOKEN
+   - Value: dbff0390e87aa29052ec5a093f643c058a99c601fbde917ff36f5d919f61d765
+
+5. Clique em "Save"
+
+============================================
+PUBLICAR O WEB APP (DEPLOY)
+============================================
+
+1. No editor, clique em:
+   Deploy > New deployment
+
+2. Na janela que abrir:
+   - Type: selecione "Web app"
+   - Description: Casamento Renato e Joyce v2
+   - Execute as: Me
+   - Who has access: Anyone
+
+3. Clique em "Deploy"
+
+4. O Google vai pedir autorizacao. Clique em "Authorize".
+   Se aparecer um aviso de seguranca, clique em:
+   Advanced > Go to... (unsafe) > Allow
+
+5. Depois de autorizar, copie a URL do Web App.
+   Ela vai ser algo assim:
+   https://script.google.com/macros/s/AKfycbxxxxxxxxxxxxxxxx/exec
+
+   COPIE ESSA URL INTEIRA. Voce vai precisar dela no proximo passo (Vercel).
+
+============================================
+FIM DO PASSO A PASSO
+============================================

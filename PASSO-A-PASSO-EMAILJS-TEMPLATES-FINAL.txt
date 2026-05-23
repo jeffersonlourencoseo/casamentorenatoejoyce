@@ -1,0 +1,96 @@
+============================================
+PASSO A PASSO - CONFIGURAR TEMPLATES DO EMAILJS (ATUALIZADO)
+Casamento Renato & Joyce
+============================================
+
+O que mudou:
+Agora o codigo envia 2 variaveis separadas para o template de presente:
+  {{presente}} = nome do presente + preco
+  {{recado}}   = recado deixado pelo comprador (ou "Nenhum recado")
+
+
+============================================
+PASSO 1: ACESSAR O EMAILJS
+============================================
+
+1. No computador, abra o navegador
+2. Va para: https://www.emailjs.com/
+3. Faca login
+
+
+============================================
+PASSO 2: EDITAR O TEMPLATE DE PRESENTE
+============================================
+
+1. No menu lateral, clique em: "Email Templates"
+2. Procure e clique no template: template_mvo3eu1
+3. Voce vera dois campos: "Subject" e "Content"
+
+4. Em "Subject", coloque:
+   🎁 {{from_name}} comprou um presente!
+
+5. Em "Content", APAGUE TUDO e cole este texto:
+
+---
+Olá, Joyce!
+
+{{from_name}} acabou de comprar um presente atraves do site.
+
+Detalhes:
+- Presente: {{presente}}
+- Recado: {{recado}}
+- Data da compra: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+---
+
+6. Clique em "Save Template"
+
+IMPORTANTE: As palavras entre {{ }} sao variaveis enviadas pelo codigo.
+Nao troque os nomes: {{from_name}}, {{presente}}, {{recado}}, {{timestamp}}
+
+
+============================================
+PASSO 3: EDITAR O TEMPLATE DE RSVP
+============================================
+
+1. Ainda em "Email Templates", clique no template: template_2dfs1io
+2. Em "Subject", coloque:
+   ✅ {{from_name}} confirmou presenca!
+
+3. Em "Content", APAGUE TUDO e cole este texto:
+
+---
+Olá, Joyce!
+
+{{from_name}} acabou de confirmar presenca no casamento atraves do site.
+
+Detalhes:
+- Nome: {{from_name}}
+- Confirmacao: {{message}}
+- Data do envio: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+---
+
+4. Clique em "Save Template"
+
+
+============================================
+PASSO 4: TESTAR
+============================================
+
+1. Faca um teste de compra de presente (R$ 0,01) e deixe um recado
+2. Verifique se o email chega assim:
+   - Presente: Cesta de piquenique (R$ 0,01)
+   - Recado: "texto do recado"
+
+3. Faca um teste de confirmacao de presenca (RSVP)
+4. Verifique se o email chega com texto de RSVP
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================

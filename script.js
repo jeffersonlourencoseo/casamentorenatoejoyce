@@ -508,17 +508,35 @@ document.addEventListener('DOMContentLoaded', () => {
       btnEnviarRecado.disabled = true;
       btnEnviarRecado.textContent = 'Enviando...';
 
-      const url = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
-        ? window.APP_CONFIG.googleSheetsWebhookUrl
-        : '';
-
       try {
-        if (url) {
-          await fetch(url, {
+        // Salvar no backend (Google Sheets proxy)
+        await fetch('/api/salvar-dados', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            aba: 'presentes',
+            timestamp: new Date().toISOString(),
+            nome,
+            sobrenome,
+            presente: gift.name,
+            valor: gift.price,
+            recado,
+            status: 'COMPLETED'
+          })
+        });
+
+        if (!unavailableIds.includes(gift.id)) {
+          unavailableIds.push(gift.id);
+        }
+        renderAccordion();
+
+        // Notificar por e-mail via backend proxy
+        try {
+          await fetch('/api/enviar-email', {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              timestamp: new Date().toISOString(),
+              tipo: 'presente',
               nome,
               sobrenome,
               presente: gift.name,
@@ -526,52 +544,8 @@ document.addEventListener('DOMContentLoaded', () => {
               recado
             })
           });
-        }
-
-        if (!unavailableIds.includes(gift.id)) {
-          unavailableIds.push(gift.id);
-        }
-        renderAccordion();
-
-        // Enviar email de notificacao de presente via EmailJS
-        const emailjsService = window.APP_CONFIG && window.APP_CONFIG.emailjsServiceId
-          ? window.APP_CONFIG.emailjsServiceId : '';
-        const emailjsTemplate = window.APP_CONFIG && window.APP_CONFIG.emailjsTemplatePresente
-          ? window.APP_CONFIG.emailjsTemplatePresente : '';
-        const emailjsPublicKey = window.APP_CONFIG && window.APP_CONFIG.emailjsPublicKey
-          ? window.APP_CONFIG.emailjsPublicKey : '';
-
-        if (emailjsService && emailjsTemplate && emailjsPublicKey) {
-          try {
-            const emailBody = {
-              service_id: emailjsService,
-              template_id: emailjsTemplate,
-              user_id: emailjsPublicKey,
-              template_params: {
-                to_name: 'Renato & Joyce',
-                from_name: `${nome} ${sobrenome}`,
-                subject: `🎁 ${nome} comprou um presente!`,
-                message: `Presente: ${gift.name} (${formatPrice(gift.price)})\nRecado: ${recado || 'Nenhum recado'}`,
-                timestamp: new Date().toLocaleString('pt-BR')
-              }
-            };
-            console.log('Enviando email de presente:', emailBody);
-            const emailRes = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify(emailBody)
-            });
-            if (!emailRes.ok) {
-              const errText = await emailRes.text();
-              console.error('EmailJS erro:', emailRes.status, errText);
-            } else {
-              console.log('EmailJS presente enviado com sucesso');
-            }
-          } catch (e) {
-            console.error('EmailJS exception:', e);
-          }
-        } else {
-          console.warn('EmailJS nao configurado:', { emailjsService, emailjsTemplate, emailjsPublicKey });
+        } catch (e) {
+          console.error('Erro ao notificar por e-mail:', e);
         }
 
         modalFinalMsg.classList.remove('hidden');
@@ -584,19 +558,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Fetch unavailable items from Google Apps Script
+  // Fetch unavailable items via API proxy
   async function loadUnavailable() {
-    const url = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
-      ? window.APP_CONFIG.googleSheetsWebhookUrl
-      : '';
-
-    if (!url) {
-      renderAccordion();
-      return;
-    }
-
     try {
-      const res = await fetch(url + '?aba=presentes');
+      const res = await fetch('/api/listar-dados?aba=presentes');
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
         const purchasedNames = data
@@ -652,50 +617,34 @@ document.addEventListener('DOMContentLoaded', () => {
       rsvpSubmit.disabled = true;
       rsvpSubmit.textContent = 'Enviando...';
 
-      const googleUrl = window.APP_CONFIG && window.APP_CONFIG.googleSheetsWebhookUrl
-        ? window.APP_CONFIG.googleSheetsWebhookUrl
-        : '';
-
       try {
-        if (googleUrl) {
-          await fetch(googleUrl, {
+        // Salvar confirmacao via backend proxy
+        await fetch('/api/salvar-dados', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            aba: 'confirmacoes',
+            timestamp: new Date().toISOString(),
+            nome,
+            sobrenome,
+            confirmacao: rsvpChoice
+          })
+        });
+
+        // Notificar por e-mail via backend proxy
+        try {
+          await fetch('/api/enviar-email', {
             method: 'POST',
-            headers: { 'Content-Type': 'text/plain' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              aba: 'confirmacoes',
-              timestamp: new Date().toISOString(),
+              tipo: 'rsvp',
               nome,
               sobrenome,
               confirmacao: rsvpChoice
             })
           });
-        }
-
-        // EmailJS
-        const emailjsService = window.APP_CONFIG && window.APP_CONFIG.emailjsServiceId
-          ? window.APP_CONFIG.emailjsServiceId : '';
-        const emailjsTemplate = window.APP_CONFIG && window.APP_CONFIG.emailjsTemplateRsvp
-          ? window.APP_CONFIG.emailjsTemplateRsvp : '';
-        const emailjsPublicKey = window.APP_CONFIG && window.APP_CONFIG.emailjsPublicKey
-          ? window.APP_CONFIG.emailjsPublicKey : '';
-
-        if (emailjsService && emailjsTemplate && emailjsPublicKey) {
-          await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              service_id: emailjsService,
-              template_id: emailjsTemplate,
-              user_id: emailjsPublicKey,
-              template_params: {
-                to_name: 'Renato & Joyce',
-                from_name: `${nome} ${sobrenome}`,
-                subject: `✅ ${nome} confirmou presença!`,
-                message: `Confirmou presença: ${rsvpChoice}`,
-                timestamp: new Date().toLocaleString('pt-BR')
-              }
-            })
-          });
+        } catch (e) {
+          console.error('Erro ao notificar por e-mail:', e);
         }
 
         launchConfetti();

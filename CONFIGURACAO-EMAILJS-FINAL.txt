@@ -1,0 +1,97 @@
+============================================
+CONFIGURACAO FINAL - TEMPLATES DO EMAILJS
+Casamento Renato & Joyce
+============================================
+
+ATENCAO: Sao 2 templates SEPARADOS. Cada um tem seu proprio texto.
+Nao misture os textos. Configure um de cada vez.
+
+
+============================================
+TEMPLATE 1: PRESENTE + RECADO AOS NOIVOS
+ID no codigo: template_mvo3eu1
+============================================
+
+1. Acesse: https://www.emailjs.com/ > Email Templates
+2. Clique no template: template_mvo3eu1
+3. Preencha EXATAMENTE assim:
+
+--- CAMPO "SUBJECT" ---
+🎁 {{from_name}} comprou um presente!
+
+--- CAMPO "CONTENT" (corpo do email) ---
+Olá, Joyce!
+
+{{from_name}} acabou de comprar um presente através do site.
+
+Detalhes:
+- Presente: {{presente}}
+- Recado aos noivos: {{recado}}
+- Data: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+---
+
+4. Clique em "Save Template"
+
+
+============================================
+TEMPLATE 2: CONFIRMACAO DE PRESENCA (RSVP)
+ID no codigo: template_2dfs1io
+============================================
+
+1. Ainda em Email Templates
+2. Clique no template: template_2dfs1io
+3. Preencha EXATAMENTE assim:
+
+--- CAMPO "SUBJECT" ---
+✅ {{from_name}} confirmou presença!
+
+--- CAMPO "CONTENT" (corpo do email) ---
+Olá, Joyce!
+
+{{from_name}} acabou de confirmar presença no casamento através do site.
+
+Detalhes:
+- Convidado: {{from_name}}
+- Resposta: {{message}}
+- Data: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+---
+
+4. Clique em "Save Template"
+
+
+============================================
+RESUMO O QUE CADA TEMPLATE FAZ
+============================================
+
+template_mvo3eu1 = PRESENTE + RECADO
+  - Dispara quando alguem COMPRA um presente e envia recado no popup
+  - Variaveis: {{from_name}}, {{presente}}, {{recado}}, {{timestamp}}
+
+template_2dfs1io = CONFIRMACAO DE PRESENCA
+  - Dispara quando alguem confirma presenca na secao RSVP
+  - Variaveis: {{from_name}}, {{message}}, {{timestamp}}
+
+
+============================================
+COMO TESTAR
+============================================
+
+1. Compre um presente de R$ 0,01 e deixe um recado
+2. O email deve chegar com o TEXTO DO TEMPLATE 1 (presente + recado)
+
+3. Confirme presenca na secao RSVP
+4. O email deve chegar com o TEXTO DO TEMPLATE 2 (confirmacao de presenca)
+
+Se algum email vier com texto errado, volte no template correspondente
+no EmailJS e verifique se salvou corretamente.
+
+
+============================================
+FIM
+============================================

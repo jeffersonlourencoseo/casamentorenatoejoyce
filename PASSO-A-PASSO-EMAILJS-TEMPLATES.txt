@@ -1,0 +1,90 @@
+============================================
+PASSO A PASSO - VERIFICAR TEMPLATES DO EMAILJS
+Casamento Renato & Joyce
+============================================
+
+O que voce precisa fazer:
+Verificar se os templates de email do EmailJS estao configurados
+com as variaveis corretas. Se as variaveis estiverem com nomes
+diferentes, os emails chegarao em branco ou nao chegarao.
+
+
+============================================
+PASSO 1: ACESSAR O EMAILJS
+============================================
+
+1. No computador, abra o navegador
+2. Va para: https://www.emailjs.com/
+3. Faca login com a conta que criou os templates
+
+
+============================================
+PASSO 2: VERIFICAR O TEMPLATE DE PRESENTE
+============================================
+
+1. No menu lateral, clique em: "Email Templates"
+2. Na lista de templates, procure por: template_mvo3eu1
+   (e o template usado para notificacao de presente)
+3. Clique no template para abrir
+4. Verifique o conteudo do template (assunto e corpo do email)
+
+As variaveis que o CODIGO envia sao:
+   {{to_name}}     = Renato & Joyce
+   {{from_name}}   = Nome do convidado
+   {{subject}}     = 🎁 Nome comprou um presente!
+   {{message}}     = Texto completo do presente + valor
+
+Se o template usar nomes DIFERENTES, exemplo:
+   {{user_name}}, {{email}}, {{body}}, {{recipient}}
+
+Voce precisa ALTERAR O CODIGO ou ALTERAR O TEMPLATE para que os
+nomes coincidam.
+
+DICA: O jeito mais facil e editar o template no EmailJS para usar
+os nomes exatos: to_name, from_name, subject, message.
+
+
+============================================
+PASSO 3: VERIFICAR O TEMPLATE DE RSVP
+============================================
+
+1. Ainda em "Email Templates", procure por: template_2dfs1io
+   (e o template usado para notificacao de presenca)
+2. Clique para abrir
+3. Verifique se usa as mesmas variaveis:
+   {{to_name}}, {{from_name}}, {{subject}}, {{message}}
+
+
+============================================
+PASSO 4: TESTAR O ENVIO
+============================================
+
+1. Dentro do EmailJS, va em: "Email Services"
+2. Clique no service: service_8gd4ljp
+3. Va na aba "Test Email" ou "Send Test"
+4. Preencha manualmente:
+   to_name = Renato & Joyce
+   from_name = Teste
+   subject = Teste de template
+   message = Isso e um teste
+5. Clique em "Send Test Email"
+6. Verifique se voce recebeu o email completo e formatado
+
+Se recebeu vazio ou nao recebeu, as variaveis estao com nomes errados.
+
+
+============================================
+RESUMO
+============================================
+
+1. EmailJS > Email Templates > abrir template_mvo3eu1
+2. Confirmar variaveis: to_name, from_name, subject, message
+3. EmailJS > Email Templates > abrir template_2dfs1io
+4. Confirmar as mesmas variaveis
+5. Fazer teste de envio
+6. Pronto
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================

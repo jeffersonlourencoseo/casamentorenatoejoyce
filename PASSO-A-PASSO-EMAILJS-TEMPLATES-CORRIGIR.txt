@@ -1,0 +1,110 @@
+============================================
+PASSO A PASSO - CORRIGIR TEMPLATES DO EMAILJS
+Casamento Renato & Joyce
+============================================
+
+O que esta acontecendo:
+O template de PRESENTE esta com texto de RSVP (confirmar presença).
+Cada evento (presente e RSVP) precisa de um template separado
+com texto proprio.
+
+
+============================================
+PASSO 1: ACESSAR O EMAILJS
+============================================
+
+1. No computador, abra o navegador
+2. Va para: https://www.emailjs.com/
+3. Faca login
+
+
+============================================
+PASSO 2: EDITAR O TEMPLATE DE PRESENTE
+============================================
+
+1. No menu lateral, clique em: "Email Templates"
+2. Procure e clique no template: template_mvo3eu1
+   (este e o template usado quando alguem compra um presente)
+3. Voce vera dois campos: "Subject" e "Content" (corpo do email)
+
+4. Em "Subject", coloque:
+   🎁 {{from_name}} comprou um presente!
+
+5. Em "Content", APAGUE TUDO e cole este texto:
+
+---
+Olá, Joyce!
+
+{{from_name}} acabou de comprar um presente atraves do site.
+
+Detalhes:
+- Presente: {{message}}
+- Comprador: {{from_name}}
+- Data da compra: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+---
+
+6. Clique em "Save Template"
+
+IMPORTANTE: As palavras entre {{ }} sao variaveis.
+Nao troque os nomes: {{from_name}}, {{message}}, {{timestamp}}
+
+
+============================================
+PASSO 3: EDITAR O TEMPLATE DE RSVP
+============================================
+
+1. Ainda em "Email Templates", clique no template: template_2dfs1io
+   (este e o template usado quando alguem confirma presenca)
+2. Em "Subject", coloque:
+   ✅ {{from_name}} confirmou presenca!
+
+3. Em "Content", APAGUE TUDO e cole este texto:
+
+---
+Olá, Joyce!
+
+{{from_name}} acabou de confirmar presenca no casamento atraves do site.
+
+Detalhes:
+- Nome: {{from_name}}
+- Confirmacao: {{message}}
+- Data do envio: {{timestamp}}
+
+---
+Site: Casamento Renato & Joyce
+---
+
+4. Clique em "Save Template"
+
+
+============================================
+PASSO 4: TESTAR
+============================================
+
+1. Faca um teste de compra de presente (R$ 0,01)
+2. Verifique se o email chega com o texto CORRETO de presente
+3. Faca um teste de confirmacao de presenca (RSVP)
+4. Verifique se o email chega com o texto CORRETO de presenca
+
+Se algum ainda vier errado, volte no template e verifique
+se salvou corretamente.
+
+
+============================================
+RESUMO
+============================================
+
+template_mvo3eu1 = Presente (texto de "comprou um presente")
+template_2dfs1io = RSVP (texto de "confirmou presenca")
+
+Cada template precisa ter seu proprio texto fixo.
+O codigo do site apenas preenche as variaveis {{ }} dentro
+desses templates.
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================

@@ -24,24 +24,25 @@ Configure estas no painel do Vercel (Project Settings > Environment Variables):
 
 | Variável | Onde obter |
 |---|---|
-| `OPENPIX_APP_ID` | Painel OpenPix > API/Plugins > App ID |
-| `OPENPIX_WEBHOOK_SECRET` | Painel OpenPix > Webhooks > Secret |
+| `MERCADO_PAGO_ACCESS_TOKEN` | Mercado Pago > Desenvolvedores > Credenciais |
+| `WEBHOOK_SECRET` | Token secreto gerado por voce (ex: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
+| `SCRIPT_TOKEN` | Token secreto para autenticar o Apps Script (ex: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`) |
 | `EMAILJS_SERVICE_ID` | emailjs.com > Email Services |
 | `EMAILJS_TEMPLATE_PRESENTE` | emailjs.com > Email Templates (template de presente) |
 | `EMAILJS_TEMPLATE_RSVP` | emailjs.com > Email Templates (template de RSVP) |
 | `EMAILJS_PUBLIC_KEY` | emailjs.com > Account > Public Key |
 | `GOOGLE_SHEETS_WEBHOOK_URL` | URL do Apps Script publicado (veja abaixo) |
+| `BASE_URL` | URL publica do site na Vercel (ex: `https://seusite.vercel.app`) |
 
 **Nunca commite esses valores no código.**
 
 ## Passo a Passo de Deploy
 
-### 1. OpenPix (Pagamentos PIX)
-1. Acesse [woovi.com](https://woovi.com) e crie sua conta OpenPix.
-2. Cadastre sua chave PIX.
-3. Vá em **API/Plugins** e copie o **App ID**.
-4. Vá em **Webhooks** e copie o **Webhook Secret**.
-5. Anote ambos para configurar no Vercel.
+### 1. Mercado Pago (Pagamentos PIX)
+1. Acesse [mercadopago.com.br/developers](https://www.mercadopago.com.br/developers) e crie sua conta.
+2. Vá em **Credenciais > Access Token** e copie o token de produção.
+3. Anote para configurar no Vercel como `MERCADO_PAGO_ACCESS_TOKEN`.
+4. Gere um `WEBHOOK_SECRET` aleatório (ex: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`).
 
 ### 2. EmailJS (Notificações por e-mail)
 1. Acesse [emailjs.com](https://emailjs.com) e crie uma conta.
@@ -63,7 +64,9 @@ Configure estas no painel do Vercel (Project Settings > Environment Variables):
    - **Recados**: Timestamp | Nome | Mensagem
 4. Abra **Extensions > Apps Script**.
 5. Cole o conteúdo do arquivo `apps-script.gs`.
-6. Substitua `COLOQUE_AQUI_O_ID_DA_PLANILHA` pelo ID real da sua planilha (encontrado na URL).
+6. Vá em **Project Settings > Script Properties** e adicione:
+   - `SHEET_ID`: ID da planilha (encontrado na URL)
+   - `SCRIPT_TOKEN`: token secreto gerado no passo 1
 7. Clique em **Deploy > New deployment > Web app**.
 8. Configure:
    - **Execute as**: Me
@@ -84,29 +87,17 @@ Configure estas no painel do Vercel (Project Settings > Environment Variables):
 
 ### 5. Vercel
 1. Acesse [vercel.com](https://vercel.com) e importe o repositório GitHub.
-2. Nas **Project Settings > Environment Variables**, adicione todas as 7 variáveis listadas acima.
+2. Nas **Project Settings > Environment Variables**, adicione todas as 9 variáveis listadas acima.
 3. Re-deploy o projeto após adicionar as variáveis.
 
-### 6. Configurar Webhook OpenPix
-1. No painel da OpenPix, vá em **Webhooks**.
-2. Adicione a URL: `https://seusite.vercel.app/api/pix-confirmado`
-3. Selecione o evento de confirmação de pagamento.
+### 6. Configurar Webhook Mercado Pago
+1. No painel do Mercado Pago, vá em **Notificações > Webhooks**.
+2. Adicione a URL com o secret (substitua pelo seu dominio real):
+   `https://seusite.vercel.app/api/pix-confirmado?secret=SEU_WEBHOOK_SECRET`
+3. Selecione o evento **Pagamento (payment)**.
+4. Salve.
 
-## Configuração do Frontend
-
-Abra `index.html` e localize o bloco `window.APP_CONFIG` (no final, antes do `<script src="script.js">`). Preencha os valores:
-
-```js
-window.APP_CONFIG = {
-  googleSheetsWebhookUrl: 'COLE_AQUI_A_URL_DO_APPS_SCRIPT',
-  emailjsServiceId: '',
-  emailjsTemplatePresente: '',
-  emailjsTemplateRsvp: '',
-  emailjsPublicKey: ''
-};
-```
-
-> Nota: `googleSheetsWebhookUrl` é obrigatória para que a lista de presentes, RSVP e mural funcionem. As variáveis EmailJS são opcionais (apenas desativam notificações por e-mail se omitidas).
+> Nota: as credenciais e URLs nao ficam mais no frontend. Tudo e gerenciado pelo backend na Vercel.
 
 ## Personalizações Antes de Publicar
 

@@ -1,0 +1,89 @@
+============================================
+PASSO A PASSO - ADICIONAR BASE_URL NA VERCEL
+Casamento Renato & Joyce
+============================================
+
+O que voce precisa fazer agora:
+Adicionar a variavel de ambiente BASE_URL no painel da Vercel
+para garantir que o webhook do Mercado Pago funcione corretamente.
+
+
+============================================
+PASSO 1: ACESSAR O PAINEL DA VERCEL
+============================================
+
+1. No computador, abra o navegador (Chrome, Edge, Firefox)
+2. Va para: https://vercel.com/dashboard
+3. Faca login com a conta GitHub
+4. Voce vera a lista de seus projetos
+5. Clique no projeto: casamentorenatoejoyce
+
+
+============================================
+PASSO 2: IR EM SETTINGS
+============================================
+
+1. Na pagina do projeto, clique na aba "Settings" (engrenagem no topo)
+2. No menu lateral esquerdo, clique em: "Environment Variables"
+3. Voce vera uma lista de variaveis ja existentes
+   (pode ter MERCADO_PAGO_ACCESS_TOKEN)
+
+
+============================================
+PASSO 3: ADICIONAR A VARIAVEL BASE_URL
+============================================
+
+1. Clique no botao "Add" (ou "+")
+2. Preencha os campos:
+
+   Name (nome):  BASE_URL
+   Value (valor): https://casamentorenatoejoyce.vercel.app
+
+3. Deixe marcado: Production, Preview e Development
+4. Clique em "Save" (salvar)
+5. A nova variavel aparecera na lista
+
+
+============================================
+PASSO 4: REDEPLOY (REIMPLANTAR)
+============================================
+
+O "Redeploy" faz o site "reiniciar" com a nova configuracao.
+
+1. No topo da pagina, clique na aba: "Deployments" (Implantacoes)
+2. O primeiro da lista e o mais recente
+3. Clique nos "3 pontinhos" (⋮) ao lado do deploy mais recente
+4. Escolha: "Redeploy" (Reimplantar)
+5. Confirme clicando novamente em "Redeploy"
+6. Aguarde 30-60 segundos
+7. O status ficara "Ready" (Pronto) quando terminar
+
+
+============================================
+RESUMO
+============================================
+
+1. Vercel Dashboard > projeto casamentorenatoejoyce
+2. Settings > Environment Variables > Add
+3. Adicione: BASE_URL = https://casamentorenatoejoyce.vercel.app
+4. Deployments > Redeploy
+5. Pronto
+
+
+============================================
+POR QUE ISSO E IMPORTANTE
+============================================
+
+Sem a BASE_URL, o webhook do Mercado Pago nao consegue notificar
+o site quando alguem paga um presente.
+
+Com a BASE_URL configurada, o Mercado Pago envia uma notificacao
+direta para o site dizendo: "o pagamento foi aprovado".
+
+Isso garante que o presente seja marcado como INDISPONIVEL
+mesmo que o convidado feche o navegador antes de enviar o recado.
+
+
+============================================
+FIM DO PASSO A PASSO
+============================================

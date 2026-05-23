@@ -1,0 +1,89 @@
+============================================
+CONFIGURACAO EMAILJS - PASSO A PASSO DEFINITIVO
+Casamento Renato & Joyce
+============================================
+
+REGRA DE OURO: Use APENAS estas variaveis no EmailJS:
+  {{from_name}}  = nome do convidado
+  {{message}}    = texto pronto enviado pelo codigo
+  {{timestamp}}  = data e hora
+
+
+============================================
+PASSO 1: TEMPLATE DE PRESENTE (template_mvo3eu1)
+============================================
+
+1. Acesse https://www.emailjs.com/ > Email Templates
+2. Clique no template: template_mvo3eu1
+3. Cole EXATAMENTE isto no Subject:
+
+🎁 {{from_name}} comprou um presente!
+
+4. Cole EXATAMENTE isto no Content:
+
+Olá, Joyce!
+
+{{from_name}} acabou de comprar um presente.
+
+{{message}}
+
+Data: {{timestamp}}
+
+---
+Casamento Renato & Joyce
+---
+
+5. Clique em SAVE
+
+O que o codigo envia em {{message}} neste caso:
+Presente: Cesta de piquenique (R$ 0,01)
+Recado: Texto deixado pelo comprador
+
+
+============================================
+PASSO 2: TEMPLATE DE PRESENCA (template_2dfs1io)
+============================================
+
+1. Ainda em Email Templates
+2. Clique no template: template_2dfs1io
+3. Cole EXATAMENTE isto no Subject:
+
+✅ {{from_name}} confirmou presença!
+
+4. Cole EXATAMENTE isto no Content:
+
+Olá, Joyce!
+
+{{from_name}} confirmou presença no casamento.
+
+{{message}}
+
+Data: {{timestamp}}
+
+---
+Casamento Renato & Joyce
+---
+
+5. Clique em SAVE
+
+O que o codigo envia em {{message}} neste caso:
+Confirmou presença: Sim
+
+
+============================================
+DIFERENCA ENTRE OS DOIS
+============================================
+
+Presente (template_mvo3eu1):
+- Tem presente + recado na variavel {{message}}
+
+Presenca (template_2dfs1io):
+- Tem apenas a confirmacao (Sim/Com certeza/Provavelmente sim)
+- NAO tem recado. A secao RSVP nao pede recado.
+
+
+============================================
+PRONTO. NAO MEXE EM MAIS NADA.
+============================================
+
+Aguarde 1 minuto pelo deploy da Vercel e teste.
