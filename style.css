@@ -1366,3 +1366,26 @@ html, body {
     font-size: 1.3rem;
   }
 }
+
+/* ===== Override: paleta verde-folha / dourado ===== */
+:root {
+    --fundo: #FFFFFF;
+    --dourado: #D4AF37;
+    --verde-folha: #4F7942;
+}
+body {
+    background-color: var(--fundo) !important;
+    color: var(--verde-folha) !important;
+}
+h1 {
+    color: var(--dourado) !important;
+}
+h2, h3, h4, h5, h6 {
+    color: var(--verde-folha) !important;
+}
+p, span, li, a, div, button, label {
+    color: var(--verde-folha) !important;
+}
+a {
+    text-decoration-color: var(--verde-folha);
+}
